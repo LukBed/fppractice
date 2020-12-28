@@ -1,4 +1,4 @@
-package pl.snipersoft.fppractice
+package pl.snipersoft.fppractice.numbers
 
 import scala.annotation.tailrec
 import scala.util.Random
@@ -12,9 +12,9 @@ object PiApproximation {
   def apply(points: Int): Double = {
     @tailrec
     def helper(pointsToGenerate: Int, pointsInside: Int, generatedPoints: Int): Double = {
-      if (pointsToGenerate <= 0) 4.0*pointsInside/generatedPoints
-      else if (generatePoint().isInCircle) helper(pointsToGenerate-1, pointsInside+1, generatedPoints+1)
-      else helper(pointsToGenerate-1, pointsInside, generatedPoints+1)
+      if (pointsToGenerate <= 0) 4.0 * pointsInside / generatedPoints
+      else if (generatePoint().isInCircle) helper(pointsToGenerate - 1, pointsInside + 1, generatedPoints + 1)
+      else helper(pointsToGenerate - 1, pointsInside, generatedPoints + 1)
     }
 
     helper(points, 0, 0)
@@ -23,6 +23,7 @@ object PiApproximation {
   private def generatePoint(): Point = Point(randomGenerator.nextDouble(), randomGenerator.nextDouble())
 
   private case class Point(x: Double, y: Double) {
-    def isInCircle: Boolean = x*x + y*y <= 1
+    def isInCircle: Boolean = x * x + y * y <= 1
   }
+
 }

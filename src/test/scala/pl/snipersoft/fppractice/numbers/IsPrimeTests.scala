@@ -3,8 +3,6 @@ package pl.snipersoft.fppractice.numbers
 import org.scalatest.Inspectors.forAll
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
-import pl.snipersoft.fppractice.NumbersUtils
-
 import NumbersUtils._
 
 class IsPrimeTests extends AnyFunSuite with Matchers {

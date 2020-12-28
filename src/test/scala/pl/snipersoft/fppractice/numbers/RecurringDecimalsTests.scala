@@ -2,7 +2,6 @@ package pl.snipersoft.fppractice.numbers
 
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
-import pl.snipersoft.fppractice.RecurringDecimals
 import org.scalatest.prop.TableDrivenPropertyChecks._
 
 class RecurringDecimalsTests extends AnyFunSuite with Matchers {
