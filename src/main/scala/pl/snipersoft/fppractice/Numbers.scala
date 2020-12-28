@@ -5,18 +5,11 @@ import scala.annotation.tailrec
 object Numbers {
   def isPrime(n: Int): Boolean = {
     @tailrec
-    def helper(n: Int, check: Int): Boolean = {
-      if (check >= n) return true
-
-      if (n % check == 0) {
-        return false
-      }
-
-      helper(n, check + 1)
-    }
+    def helper(check: Int): Boolean =
+      check >= n/2+1 || (n % check != 0 && helper(check + 1))
 
     if (n >= 2) {
-      helper(n, 2)
+      helper(2)
     } else
       false
   }
