@@ -4,12 +4,14 @@ import scala.annotation.tailrec
 
 object RecurringDecimals {
   def apply(numerator: Int, denominator: Int): String = {
-    val total = numerator/denominator
-    val rest = numerator%denominator
+    val absDenominator = Math.abs(denominator)
+    val total = Math.abs(numerator/denominator)
+    val rest = Math.abs(numerator%denominator)
+    val sign = if (1.0*numerator/denominator < 0) "-" else ""
 
     @tailrec
     def helper(current: Int, operations: List[Operation]): String = {
-      val operation = Operation(current, current/denominator, current%denominator)
+      val operation = Operation(current, current/absDenominator, current%absDenominator)
       val theSameResult = operations.find(o => o.result == operation.result && o.dividend == operation.dividend)
 
       theSameResult match {
@@ -29,8 +31,8 @@ object RecurringDecimals {
     }
 
     rest match {
-      case 0 => total.toString
-      case _ => s"$total.${helper(rest*10, Nil)}"
+      case 0 => s"$sign$total"
+      case _ => s"$sign$total.${helper(rest*10, Nil)}"
     }
   }
 
