@@ -13,4 +13,17 @@ object Numbers {
     } else
       false
   }
+
+  def decompose(n: Int): List[Int] = {
+    @tailrec
+    def helper(check: Int, result: List[Int]): List[Int] = {
+      if (check > n) return result
+
+      if (n % check == 0) helper(check + 1, result ++ Seq(check))
+      else helper(check + 1, result)
+    }
+
+    if (n<0) return decompose(-n)
+    helper(1, Nil)
+  }
 }
