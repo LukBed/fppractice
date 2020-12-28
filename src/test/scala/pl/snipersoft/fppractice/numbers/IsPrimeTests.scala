@@ -3,7 +3,9 @@ package pl.snipersoft.fppractice.numbers
 import org.scalatest.Inspectors.forAll
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
-import pl.snipersoft.fppractice.Numbers
+import pl.snipersoft.fppractice.NumbersUtils
+
+import NumbersUtils._
 
 class IsPrimeTests extends AnyFunSuite with Matchers {
   val primes = List(2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97,
@@ -12,13 +14,13 @@ class IsPrimeTests extends AnyFunSuite with Matchers {
 
   forAll(primes) { n =>
     test(s"number $n should be prime") {
-      Numbers.isPrime(n) shouldBe true
+      n.isPrime shouldBe true
     }
   }
 
   forAll(notPrimes) { n =>
     test(s"number $n should not be prime") {
-      Numbers.isPrime(n) shouldBe false
+      n.isPrime shouldBe false
     }
   }
 }
