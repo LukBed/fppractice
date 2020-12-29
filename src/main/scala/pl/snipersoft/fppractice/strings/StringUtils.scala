@@ -42,6 +42,40 @@ object StringUtils {
 
       helper(s, 0)
     }
+
+    def justify(width: Int): String = {
+      @tailrec
+      def addWordsToLines(wordsToBeAdd: List[String], lines: List[Line]): List[Line] = {
+        if (wordsToBeAdd.isEmpty) return lines
+
+        val currentWord = wordsToBeAdd.head
+        val currentLine = lines.last
+
+        if (currentLine.length + currentWord.length < width) {
+          val newLines = lines.slice(0, lines.length-1) :+ Line(currentLine.words :+ currentWord)
+          addWordsToLines(wordsToBeAdd.tail, newLines)
+        } else {
+          val newLines = lines :+ Line(List(currentWord))
+          addWordsToLines(wordsToBeAdd.tail, newLines)
+        }
+      }
+
+      case class Line(words: List[String]) {
+        lazy val length: Int = words match {
+          case Nil => 0
+          case List(x) => x.length
+          case _ => words.map(_.length).sum + words.length - 1
+        }
+
+        def value(): String = {
+          words.mkString(" ")
+        }
+      }
+
+      val words = s.split(" ").toList
+      val lines = addWordsToLines(words, List(Line(Nil)))
+      lines.map(_.value()).mkString("\n")
+    }
   }
 
   def generateAllValidParentheses(n: Int): Set[String] = {
