@@ -19,11 +19,30 @@ object StringUtils {
           case "" => newAccumulator
           case _ => helper(value.substring(1), newAccumulator)
         }
+      }
+
+      helper(s, Map.empty)
     }
 
-    helper(s, Map.empty)
-  }
+    def isAnagramOf(s2: String): Boolean = {
+      if (s.length != s2.length) return false
 
+      @tailrec
+      def helper(currentIndex: Int): Boolean = {
+        if (currentIndex >= s.length) return true
+
+        if (s.charAt(currentIndex) == s2.charAt(s2.length - currentIndex - 1)) {
+          helper(currentIndex + 1)
+        } else
+          false
+      }
+
+      helper(0)
+    }
+  }
 }
 
+object T extends App {
+  import StringUtils._
+  println("AbcD".isAnagramOf("dcbA"))
 }
