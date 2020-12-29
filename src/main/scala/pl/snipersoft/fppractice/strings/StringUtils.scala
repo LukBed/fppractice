@@ -43,4 +43,19 @@ object StringUtils {
       helper(s, 0)
     }
   }
+
+  def generateAllValidParentheses(n: Int): Set[String] = {
+    @tailrec
+    def helper(current: Int, accumulator: Set[String]): Set[String] = {
+      if (current == n) return accumulator
+
+      val newAcc = accumulator.flatMap(v => Set(s"($v)", s"()$v", s"$v()"))
+      helper(current+1, newAcc)
+    }
+
+    n match {
+      case 0 => Set.empty
+      case _ => helper(1, Set("()"))
+    }
+  }
 }
