@@ -25,5 +25,25 @@ object StringUtils {
     }
 
     def isAnagramOf(s2: String): Boolean = s.sorted == s2.sorted
+
+    def hasValidParentheses: Boolean = {
+      if (s.chars().anyMatch(ch => '(' != ch && ')' != ch)) return false
+
+      @tailrec
+      def helper(currentString: String, balance: Int): Boolean = {
+        if (balance<0) return false
+        if (currentString.isEmpty && balance == 0) return true
+        if (currentString.isEmpty && balance != 0) return false
+
+        val rest = currentString.substring(1)
+
+        currentString.charAt(0) match {
+          case '(' => helper(rest, balance+1)
+          case ')' => helper(rest, balance-1)
+        }
+      }
+
+      helper(s, 0)
+    }
   }
 }
