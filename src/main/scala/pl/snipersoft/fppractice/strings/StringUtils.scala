@@ -27,17 +27,7 @@ object StringUtils {
     def isAnagramOf(s2: String): Boolean = {
       if (s.length != s2.length) return false
 
-      @tailrec
-      def helper(currentIndex: Int): Boolean = {
-        if (currentIndex >= s.length) return true
-
-        if (s.charAt(currentIndex) == s2.charAt(s2.length - currentIndex - 1)) {
-          helper(currentIndex + 1)
-        } else
-          false
-      }
-
-      helper(0)
+      0.until(s.length).count(i => s.charAt(i) == s2.charAt(s2.length-i-1)) == s.length
     }
   }
 }
