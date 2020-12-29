@@ -24,15 +24,6 @@ object StringUtils {
       helper(s, Map.empty)
     }
 
-    def isAnagramOf(s2: String): Boolean = {
-      if (s.length != s2.length) return false
-
-      !0.until(s.length).exists(i => s.charAt(i) != s2.charAt(s2.length - i - 1))
-    }
+    def isAnagramOf(s2: String): Boolean = s.sorted == s2.sorted
   }
-}
-
-object T extends App {
-  import StringUtils._
-  println("AbcD".isAnagramOf("dcbA"))
 }
