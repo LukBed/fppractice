@@ -32,14 +32,11 @@ object StringUtils {
       @tailrec
       def helper(currentString: String, balance: Int): Boolean = {
         if (balance<0) return false
-        if (currentString.isEmpty && balance == 0) return true
-        if (currentString.isEmpty && balance != 0) return false
 
-        val rest = currentString.substring(1)
-
-        currentString.charAt(0) match {
-          case '(' => helper(rest, balance+1)
-          case ')' => helper(rest, balance-1)
+        currentString.headOption match {
+          case Some('(') => helper(currentString.tail, balance+1)
+          case Some(')') => helper(currentString.tail, balance-1)
+          case None => balance == 0
         }
       }
 
