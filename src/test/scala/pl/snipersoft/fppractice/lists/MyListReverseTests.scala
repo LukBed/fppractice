@@ -4,9 +4,15 @@ import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
 class MyListReverseTests extends AnyFunSuite with Matchers {
-  test("should reverse multi-elements list") {
+  test("should reverse three-elements list") {
     val list = "a" :: "b" :: "c" :: MyNil
     val reversed = "c" :: "b" :: "a" :: MyNil
+    list.reverse shouldBe reversed
+  }
+
+  test("should reverse multi-elements list") {
+    val list = "a" :: "b" :: "c" :: "d" :: MyNil
+    val reversed = "d" :: "c" :: "b" :: "a" :: MyNil
     list.reverse shouldBe reversed
   }
 

@@ -7,6 +7,8 @@ sealed abstract class MyList[+T] {
 
   def tail: MyList[T]
 
+  def lastOption: Option[T]
+
   def isEmpty: Boolean = headOption.isEmpty
 
   def headOption: Option[T]
@@ -27,6 +29,8 @@ case object MyNil extends MyList[Nothing] {
 
   override def tail = throw new NoSuchElementException
 
+  override def lastOption: Option[Nothing] = None
+
   override def headOption: Option[Nothing] = None
 
   override def toString: String = "[]"
@@ -42,6 +46,8 @@ case object MyNil extends MyList[Nothing] {
 
 case class ::[+T](override val head: T, override val tail: MyList[T]) extends MyList[T] {
   override def headOption: Option[T] = Some(head)
+
+  override def lastOption: Option[T] = if (tail.isEmpty) headOption else tail.lastOption
 
   override def toString: String = {
     @tailrec
@@ -76,9 +82,13 @@ case class ::[+T](override val head: T, override val tail: MyList[T]) extends My
   }
 
   override def reverse: MyList[T] = {
-    if (tail.isEmpty) return this
-    if (tail.tail.isEmpty) return tail.head :: head :: MyNil
-    tail.reverse.addAtTheEnd(head)
+    @tailrec
+    def tailRec(todo: MyList[T], acc: MyList[T]): MyList[T] = {
+      if (todo.isEmpty) return acc
+      tailRec(todo.tail, todo.head :: acc)
+    }
+
+    tailRec(this, MyNil)
   }
 
   override def addAtTheEnd[S >: T](elem: S): MyList[S] = {
