@@ -1,0 +1,12 @@
+package pl.snipersoft.fppractice.lists
+
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
+
+class MyListMapTests extends AnyFunSuite with Matchers {
+  test("should map the list") {
+    val list = 1 :: 3 :: 5 :: MyNil
+    val expected = 2 :: 6 :: 10 :: MyNil
+    list.map(_*2) shouldBe expected
+  }
+}

@@ -26,6 +26,12 @@ sealed abstract class MyList[+T] {
   def ++[S >: T](other: MyList[S]): MyList[S]
 
   def removeAt(index: Int): MyList[T]
+
+  def map[S](f: T => S): MyList[S]
+
+  def flatMap[S](f: T => MyList[S]): MyList[S]
+
+  def filter(f: T => Boolean): MyList[T]
 }
 
 case object MyNil extends MyList[Nothing] {
@@ -50,6 +56,12 @@ case object MyNil extends MyList[Nothing] {
   override def ++[S >: Nothing](other: MyList[S]): MyList[S] = other
 
   override def removeAt(index: Int): MyList[Nothing] = this
+
+  override def map[S](f: Nothing => S): MyList[Nothing] = this
+
+  override def flatMap[S](f: Nothing => MyList[S]): MyList[Nothing] = this
+
+  override def filter(f: Nothing => Boolean): MyList[Nothing] = this
 }
 
 case class ::[+T](override val head: T, override val tail: MyList[T]) extends MyList[T] {
@@ -125,6 +137,36 @@ case class ::[+T](override val head: T, override val tail: MyList[T]) extends My
 
     if (index < 0) return this
     tailRec(this, MyNil, index)
+  }
+
+  override def map[S](f: T => S): MyList[S] = {
+    @tailrec
+    def tailRec(todo: MyList[T], acc: MyList[S]): MyList[S] = {
+      if (todo.isEmpty) return acc
+      tailRec(todo.tail, f(todo.head) :: acc)
+    }
+
+    tailRec(this, MyNil).reverse
+  }
+
+  override def flatMap[S](f: T => MyList[S]): MyList[S] = {
+    @tailrec
+    def tailRec(todo: MyList[T], acc: MyList[S]): MyList[S] = {
+      if (todo.isEmpty) return acc
+      tailRec(todo.tail, acc ++ f(todo.head))
+    }
+
+    tailRec(this, MyNil)
+  }
+
+  override def filter(f: T => Boolean): MyList[T] = {
+    def tailRec(todo: MyList[T], acc: MyList[T]): MyList[T] = {
+      if (todo.isEmpty) return acc
+      if (f(todo.head)) return tailRec(todo.tail, todo.head :: acc)
+      tailRec(todo.tail, acc)
+    }
+
+    tailRec(this, MyNil).reverse
   }
 }
 
