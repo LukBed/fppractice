@@ -9,6 +9,8 @@ sealed abstract class MyList[+T] {
   def headOption: Option[T]
 
   def ::[S >: T](elem: S): MyList[S] = new ::(elem, this)
+
+  def apply(index: Int): T
 }
 
 case object MyNil extends MyList[Nothing] {
@@ -17,6 +19,8 @@ case object MyNil extends MyList[Nothing] {
   override def headOption: Option[Nothing] = None
 
   override def toString: String = "[]"
+
+  override def apply(index: Int) = throw new NoSuchElementException
 }
 
 case class ::[+T](override val head: T, override val tail: MyList[T]) extends MyList[T] {
@@ -31,5 +35,16 @@ case class ::[+T](override val head: T, override val tail: MyList[T]) extends My
 
     val generated = tailRec(this, "")
     s"[${generated.substring(0, generated.length-1)}]"
+  }
+
+  override def apply(index: Int): T = {
+    @tailrec
+    def tailRec(list: MyList[T], n: Int): T = {
+      if (n == 0) return list.head
+      if (list.isEmpty) throw new NoSuchElementException
+      tailRec(list.tail, n-1)
+    }
+
+    tailRec(this, index)
   }
 }
