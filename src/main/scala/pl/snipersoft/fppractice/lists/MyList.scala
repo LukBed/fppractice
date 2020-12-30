@@ -97,3 +97,12 @@ case class ::[+T](override val head: T, override val tail: MyList[T]) extends My
     head :: tail.addAtTheEnd(elem)
   }
 }
+
+object MyList {
+  def from[T](iterable: Iterable[T]): MyList[T] = {
+    iterable.headOption match {
+      case None => MyNil
+      case Some(h) => h :: MyList.from(iterable.tail)
+    }
+  }
+}
