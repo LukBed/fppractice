@@ -187,10 +187,10 @@ case class ::[+T](override val head: T, override val tail: MyList[T]) extends My
 
     @tailrec
     def updateCountTailRec(element: T, todo: MyList[(T, Int)], checked: MyList[(T, Int)]): MyList[(T, Int)] = {
-      if (todo.isEmpty) return (element, 1) :: checked
+      if (todo.isEmpty) return checked ++ ((element, 1) :: MyNil)
       if (todo.head._1 == element) {
         val incremented = todo.head.copy(_2 = todo.head._2 + 1)
-        return checked.reverse ++ (incremented :: MyNil) ++ todo.tail
+        return (incremented :: MyNil) ++ todo.tail ++ checked.reverse
       }
 
       updateCountTailRec(element, todo.tail, todo.head :: checked)
