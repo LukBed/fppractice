@@ -24,4 +24,11 @@ class MyListReverseTests extends AnyFunSuite with Matchers {
   test("should reverse empty list") {
     MyNil.reverse shouldBe MyNil
   }
+
+  test("should reverse big list") {
+    val list = MyList.from(0 to 1000000).reverse
+    list(0) shouldBe 1000000
+    list(1) shouldBe 999999
+    list(1000000) shouldBe 0
+  }
 }
