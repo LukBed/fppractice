@@ -3,7 +3,7 @@ package pl.snipersoft.fppractice.lists
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
-class MyListGetElement extends AnyFunSuite with Matchers {
+class MyListGetElementTests extends AnyFunSuite with Matchers {
   test("should get right element from multi-elements list") {
     val list = "a" :: "b" :: "c" :: MyNil
     list(0) shouldBe "a"
@@ -33,5 +33,4 @@ class MyListGetElement extends AnyFunSuite with Matchers {
       MyNil(1)
     }
   }
-
 }
