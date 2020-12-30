@@ -32,6 +32,8 @@ sealed abstract class MyList[+T] {
   def flatMap[S](f: T => MyList[S]): MyList[S]
 
   def filter(f: T => Boolean): MyList[T]
+
+  def rle(): MyList[(T, Int)]
 }
 
 case object MyNil extends MyList[Nothing] {
@@ -62,6 +64,8 @@ case object MyNil extends MyList[Nothing] {
   override def flatMap[S](f: Nothing => MyList[S]): MyList[Nothing] = this
 
   override def filter(f: Nothing => Boolean): MyList[Nothing] = this
+
+  override def rle(): MyList[Nothing] = this
 }
 
 case class ::[+T](override val head: T, override val tail: MyList[T]) extends MyList[T] {
@@ -168,6 +172,31 @@ case class ::[+T](override val head: T, override val tail: MyList[T]) extends My
     }
 
     tailRec(this, MyNil).reverse
+  }
+
+  override def rle(): MyList[(T, Int)] = {
+    @tailrec
+    def tailRec(todo: MyList[T], acc: MyList[(T, Int)]): MyList[(T, Int)] = {
+      if (todo.isEmpty) return acc
+      tailRec(todo.tail, updateCount(todo.head, acc))
+    }
+
+    def updateCount(element: T, acc: MyList[(T, Int)]): MyList[(T, Int)] = {
+      updateCountTailRec(element, acc, MyNil)
+    }
+
+    @tailrec
+    def updateCountTailRec(element: T, todo: MyList[(T, Int)], checked: MyList[(T, Int)]): MyList[(T, Int)] = {
+      if (todo.isEmpty) return (element, 1) :: checked
+      if (todo.head._1 == element) {
+        val incremented = todo.head.copy(_2 = todo.head._2 + 1)
+        return checked.reverse ++ (incremented :: MyNil) ++ todo.tail
+      }
+
+      updateCountTailRec(element, todo.tail, todo.head :: checked)
+    }
+
+    tailRec(this, MyNil)
   }
 }
 
