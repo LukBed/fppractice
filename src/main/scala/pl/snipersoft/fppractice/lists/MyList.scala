@@ -100,9 +100,13 @@ case class ::[+T](override val head: T, override val tail: MyList[T]) extends My
 
 object MyList {
   def from[T](iterable: Iterable[T]): MyList[T] = {
-    iterable.headOption match {
-      case None => MyNil
-      case Some(h) => h :: MyList.from(iterable.tail)
+    @tailrec
+    def tailRec(i: Iterable[T], acc: MyList[T]): MyList[T] = {
+      if (iterable.isEmpty) return acc
+      if (i.size == 1) return i.head :: acc
+      tailRec(i.tail, i.head :: acc)
     }
+
+    tailRec(iterable, MyNil).reverse
   }
 }

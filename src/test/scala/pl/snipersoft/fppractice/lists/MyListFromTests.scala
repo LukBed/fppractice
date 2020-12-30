@@ -8,7 +8,9 @@ class MyListFromTests extends AnyFunSuite with Matchers {
     MyList.from(1 to 5) shouldBe (1 :: 2 :: 3 :: 4 :: 5 :: MyNil)
   }
 
-  test("should create list from big range without exception") {
-    MyList.from(1 to 1000000)
+  test("should create list from big range") {
+    val list = MyList.from(1 to 1000000)
+    list(0) shouldBe 1
+    list(999999) shouldBe 1000000
   }
 }
