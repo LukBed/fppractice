@@ -24,6 +24,8 @@ sealed abstract class MyList[+T] {
   def addAtTheEnd[S >: T](elem: S): MyList[S]
 
   def ++[S >: T](other: MyList[S]): MyList[S]
+
+  def removeAt(index: Int): MyList[T]
 }
 
 case object MyNil extends MyList[Nothing] {
@@ -46,6 +48,8 @@ case object MyNil extends MyList[Nothing] {
   override def addAtTheEnd[S >: Nothing](elem: S): MyList[S] = elem :: this
 
   override def ++[S >: Nothing](other: MyList[S]): MyList[S] = other
+
+  override def removeAt(index: Int): MyList[Nothing] = this
 }
 
 case class ::[+T](override val head: T, override val tail: MyList[T]) extends MyList[T] {
@@ -109,6 +113,18 @@ case class ::[+T](override val head: T, override val tail: MyList[T]) extends My
     }
 
     tailRec(this.reverse, other)
+  }
+
+  override def removeAt(index: Int): MyList[T] = {
+    @tailrec
+    def tailRec(todo: MyList[T], acc: MyList[T], n: Int): MyList[T] = {
+      if (todo.isEmpty) return this
+      if (n == 0) return acc.reverse ++ todo.tail
+      tailRec(todo.tail, todo.head :: acc, n-1)
+    }
+
+    if (index < 0) return this
+    tailRec(this, MyNil, index)
   }
 }
 
