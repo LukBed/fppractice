@@ -9,4 +9,9 @@ class MyListMapTests extends AnyFunSuite with Matchers {
     val expected = 2 :: 6 :: 10 :: MyNil
     list.map(_*2) shouldBe expected
   }
+
+  test("should map the big list") {
+    val list = MyList.from(1 to 1000000)
+    list.map(_+1).length shouldBe 1000000
+  }
 }

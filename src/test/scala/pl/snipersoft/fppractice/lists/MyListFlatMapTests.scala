@@ -10,4 +10,10 @@ class MyListFlatMapTests extends AnyFunSuite with Matchers {
     val function = (i: Int) => i :: i*11 :: i*111 :: MyNil
     list.flatMap(function) shouldBe expected
   }
+
+  test("should flat map the big list") {
+    val list = MyList.from(1 to 1000000)
+    val function = (i: Int) => i :: i*11 :: i*111 :: MyNil
+    list.flatMap(function).length shouldBe 3000000
+  }
 }

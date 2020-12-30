@@ -152,18 +152,19 @@ case class ::[+T](override val head: T, override val tail: MyList[T]) extends My
   override def flatMap[S](f: T => MyList[S]): MyList[S] = {
     @tailrec
     def tailRec(todo: MyList[T], acc: MyList[S]): MyList[S] = {
-      if (todo.isEmpty) return acc
-      tailRec(todo.tail, acc ++ f(todo.head))
+      if (todo.isEmpty) return acc.reverse
+      tailRec(todo.tail, f(todo.head).reverse ++ acc)
     }
 
     tailRec(this, MyNil)
   }
 
   override def filter(f: T => Boolean): MyList[T] = {
+    @tailrec
     def tailRec(todo: MyList[T], acc: MyList[T]): MyList[T] = {
       if (todo.isEmpty) return acc
-      if (f(todo.head)) return tailRec(todo.tail, todo.head :: acc)
-      tailRec(todo.tail, acc)
+      if (f(todo.head)) tailRec(todo.tail, todo.head :: acc)
+      else tailRec(todo.tail, acc)
     }
 
     tailRec(this, MyNil).reverse
