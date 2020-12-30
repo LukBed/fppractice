@@ -22,6 +22,8 @@ sealed abstract class MyList[+T] {
   def reverse: MyList[T]
 
   def addAtTheEnd[S >: T](elem: S): MyList[S]
+
+  def ++[S >: T](other: MyList[S]): MyList[S]
 }
 
 case object MyNil extends MyList[Nothing] {
@@ -42,6 +44,8 @@ case object MyNil extends MyList[Nothing] {
   override def reverse: MyList[Nothing] = this
 
   override def addAtTheEnd[S >: Nothing](elem: S): MyList[S] = elem :: this
+
+  override def ++[S >: Nothing](other: MyList[S]): MyList[S] = other
 }
 
 case class ::[+T](override val head: T, override val tail: MyList[T]) extends MyList[T] {
@@ -95,6 +99,16 @@ case class ::[+T](override val head: T, override val tail: MyList[T]) extends My
     if (tail.isEmpty) return head :: elem :: MyNil
     if (tail.tail.isEmpty) return head :: tail.head :: elem :: MyNil
     head :: tail.addAtTheEnd(elem)
+  }
+
+  override def ++[S >: T](other: MyList[S]): MyList[S] = {
+    @tailrec
+    def tailRec(toAdd: MyList[S], acc: MyList[S]): MyList[S] = {
+      if (toAdd.isEmpty) return acc
+      tailRec(toAdd.tail, toAdd.head :: acc)
+    }
+
+    tailRec(this.reverse, other)
   }
 }
 
