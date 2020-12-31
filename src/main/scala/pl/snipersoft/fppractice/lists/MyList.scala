@@ -36,6 +36,8 @@ sealed abstract class MyList[+T] {
   def rle(): MyList[(T, Int)]
 
   def duplicateEach(n: Int): MyList[T]
+
+  def rotate(n: Int): MyList[T]
 }
 
 case object MyNil extends MyList[Nothing] {
@@ -70,6 +72,8 @@ case object MyNil extends MyList[Nothing] {
   override def rle(): MyList[Nothing] = this
 
   override def duplicateEach(n: Int): MyList[Nothing] = this
+
+  override def rotate(n: Int): MyList[Nothing] = this
 }
 
 case class ::[+T](override val head: T, override val tail: MyList[T]) extends MyList[T] {
@@ -213,6 +217,18 @@ case class ::[+T](override val head: T, override val tail: MyList[T]) extends My
     }
 
     flatMap(duplicateElement)
+  }
+
+  override def rotate(n: Int): MyList[T] = {
+    @tailrec
+    def tailRec(i: Int, todo: MyList[T], acc: MyList[T]): MyList[T] = {
+      if (i == 0) return todo ++ acc.reverse
+      if (todo.isEmpty) throw new IllegalArgumentException
+      tailRec(i-1, todo.tail, todo.head :: acc)
+    }
+
+    if (n<0) throw new IllegalArgumentException
+    tailRec(n, this, MyNil)
   }
 }
 
