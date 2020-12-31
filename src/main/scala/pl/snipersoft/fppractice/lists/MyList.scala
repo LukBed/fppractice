@@ -41,6 +41,8 @@ sealed abstract class MyList[+T] {
   def rotate(n: Int): MyList[T]
 
   def sample(n: Int): MyList[T]
+
+  def sorted[S >: T](ordering: Ordering[S]): MyList[S]
 }
 
 case object MyNil extends MyList[Nothing] {
@@ -79,6 +81,8 @@ case object MyNil extends MyList[Nothing] {
   override def rotate(n: Int): MyList[Nothing] = this
 
   override def sample(n: Int): MyList[Nothing] = this
+
+  override def sorted[S >: Nothing](ordering: Ordering[S]): MyList[Nothing] = this
 }
 
 case class ::[+T](override val head: T, override val tail: MyList[T]) extends MyList[T] {
@@ -248,6 +252,23 @@ case class ::[+T](override val head: T, override val tail: MyList[T]) extends My
     val random = new Random(System.currentTimeMillis())
     val l = length
     MyList.from(0 until n).map(_ => apply(random.nextInt(l)))
+  }
+
+  override def sorted[S >: T](ordering: Ordering[S]): MyList[S] = {
+    @tailrec
+    def tailRec(todo: MyList[S], acc: MyList[S]): MyList[S] = {
+      if (todo.isEmpty) return acc
+      tailRec(todo.tail, addElement(todo.head, acc))
+    }
+
+    @tailrec
+    def addElement(elem: S, todo: MyList[S], acc: MyList[S] = MyNil): MyList[S] = {
+      if (todo.isEmpty) return (elem :: acc).reverse
+      if (ordering.gteq(todo.head, elem)) return  (elem :: acc).reverse ++ todo
+      addElement(elem, todo.tail, todo.head :: acc)
+    }
+
+    tailRec(this, MyNil)
   }
 }
 
