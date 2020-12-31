@@ -34,6 +34,8 @@ sealed abstract class MyList[+T] {
   def filter(f: T => Boolean): MyList[T]
 
   def rle(): MyList[(T, Int)]
+
+  def duplicateEach(n: Int): MyList[T]
 }
 
 case object MyNil extends MyList[Nothing] {
@@ -66,6 +68,8 @@ case object MyNil extends MyList[Nothing] {
   override def filter(f: Nothing => Boolean): MyList[Nothing] = this
 
   override def rle(): MyList[Nothing] = this
+
+  override def duplicateEach(n: Int): MyList[Nothing] = this
 }
 
 case class ::[+T](override val head: T, override val tail: MyList[T]) extends MyList[T] {
@@ -197,6 +201,18 @@ case class ::[+T](override val head: T, override val tail: MyList[T]) extends My
     }
 
     tailRec(this, MyNil)
+  }
+
+  override def duplicateEach(n: Int): MyList[T] = {
+    def duplicateElement(elem: T): MyList[T] = duplicateElementTailRec(elem, n, MyNil)
+
+    @tailrec
+    def duplicateElementTailRec(elem: T, i: Int, acc: MyList[T]): MyList[T] = {
+      if (i == 0) return acc
+      duplicateElementTailRec(elem, i-1, elem :: acc)
+    }
+
+    flatMap(duplicateElement)
   }
 }
 
