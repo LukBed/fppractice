@@ -280,27 +280,17 @@ case class ::[+T](override val head: T, override val tail: MyList[T]) extends My
   }
 
   override def mergeSorted[S >: T](ordering: Ordering[S]): MyList[S] = {
-    def splitIntoTwoParts(input: MyList[S]): (MyList[S], MyList[S]) = {
-      @tailrec
-      def splitIntoTwoPartsTailRec(i: Int, todo: MyList[S], acc: MyList[S] = MyNil): (MyList[S], MyList[S]) = {
-        if (i == 0) return (acc.reverse, todo)
-        splitIntoTwoPartsTailRec(i-1, todo.tail, todo.head :: acc)
+        @tailrec
+    def tailRec(smallLists: MyList[MyList[S]], bigLists: MyList[MyList[S]]): MyList[S] = {
+      if (smallLists.isEmpty && bigLists.isEmpty) MyNil
+      else if (smallLists.isEmpty && bigLists.tail.isEmpty) bigLists.head
+      else if (smallLists.isEmpty) tailRec(bigLists, MyNil)
+      else if (smallLists.tail.isEmpty) tailRec(smallLists.head :: bigLists, MyNil)
+      else {
+        val newList = join(smallLists.head, smallLists.tail.head)
+        tailRec(smallLists.tail.tail, newList :: bigLists)
       }
-
-      splitIntoTwoPartsTailRec(input.length/2, input)
     }
-
-    def doIt(input: MyList[S]): MyList[S] = {
-      if (input.isEmpty || input.tail.isEmpty) return input
-      val parts = splitIntoTwoParts(input)
-
-      val sortedFirst = doIt(parts._1)
-      val sortedSecond = doIt(parts._2)
-
-      join(sortedFirst, sortedSecond)
-    }
-
-    //jak są 2 elementy to sortujemy
 
     def join(l1: MyList[S], l2: MyList[S]): MyList[S] = {
       @tailrec
@@ -319,7 +309,8 @@ case class ::[+T](override val head: T, override val tail: MyList[T]) extends My
       addAllElements(l2, l1)
     }
 
-    doIt(this)
+    if (tail.isEmpty) return this
+    tailRec(this.map(_ :: MyNil), MyNil)
   }
 
   override def quickSorted[S >: T](ordering: Ordering[S]): MyList[S] = {

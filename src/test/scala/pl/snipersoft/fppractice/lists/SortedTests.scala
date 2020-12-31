@@ -34,6 +34,13 @@ abstract class SortedTests(val sortingType: String, val sort: (MyList[Int], Orde
     check(1 :: 2 :: 3 :: 4 :: 5 :: 6 :: 7 :: 8 :: 9 :: 10 :: MyNil)
   }
 
+  test(s"should sort list with odd values ($sortingType)") {
+    val list = 4 :: 7 :: 3 :: 2 :: 5 :: 6 :: 1 :: MyNil
+    val expected = 1 :: 2 :: 3 :: 4 :: 5 :: 6 :: 7 :: MyNil
+    val sorted = sort(list, ordering)
+    sorted shouldBe expected
+  }
+
   test(s"should sort the single element list ($sortingType)") {
     val list = 1 :: MyNil
     val sorted = sort(list, ordering)
