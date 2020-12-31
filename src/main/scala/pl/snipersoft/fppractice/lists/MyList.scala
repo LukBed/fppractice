@@ -322,17 +322,10 @@ case class ::[+T](override val head: T, override val tail: MyList[T]) extends My
       else readLeftAndRight(elem, toCheck.tail, toCheck.head :: left, right)
     }
 
-    def joinTwoElements(a: S, b: S): MyList[S] = if (ordering.gteq(a, b)) b :: a :: MyNil else a :: b :: MyNil
-
-    this match {
-      case _ :: MyNil => this
-      case a :: b :: MyNil => joinTwoElements(a, b)
-      case _ =>
-        val leftAndRight = readLeftAndRight(head, tail)
-        val left = leftAndRight._1
-        val right = leftAndRight._2
-        left.quickSorted(ordering) ++ (head :: right.quickSorted(ordering))
-    }
+    val leftAndRight = readLeftAndRight(head, tail)
+    val left = leftAndRight._1
+    val right = leftAndRight._2
+    left.quickSorted(ordering) ++ (head :: right.quickSorted(ordering))
   }
 }
 
