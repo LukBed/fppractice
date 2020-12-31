@@ -288,7 +288,7 @@ case class ::[+T](override val head: T, override val tail: MyList[T]) extends My
         case (MyNil, _) => tailRec(bigLists, MyNil)
         case (_ :: MyNil, _) => tailRec(smallLists.head :: bigLists, MyNil)
         case _ => val newList = join(smallLists.head, smallLists.tail.head)
-                tailRec(smallLists.tail.tail, newList :: bigLists)
+          tailRec(smallLists.tail.tail, newList :: bigLists)
       }
     }
 
@@ -314,7 +314,25 @@ case class ::[+T](override val head: T, override val tail: MyList[T]) extends My
   }
 
   override def quickSorted[S >: T](ordering: Ordering[S]): MyList[S] = {
-    ???
+    @tailrec
+    def readLeftAndRight(elem: S, toCheck: MyList[S],
+                         left: MyList[S] = MyNil, right: MyList[S] = MyNil): (MyList[S], MyList[S]) = {
+      if (toCheck.isEmpty) return (left, right)
+      if (ordering.gteq(toCheck.head, elem)) readLeftAndRight(elem, toCheck.tail, left, toCheck.head :: right)
+      else readLeftAndRight(elem, toCheck.tail, toCheck.head :: left, right)
+    }
+
+    def joinTwoElements(a: S, b: S): MyList[S] = if (ordering.gteq(a, b)) b :: a :: MyNil else a :: b :: MyNil
+
+    this match {
+      case _ :: MyNil => this
+      case a :: b :: MyNil => joinTwoElements(a, b)
+      case _ =>
+        val leftAndRight = readLeftAndRight(head, tail)
+        val left = leftAndRight._1
+        val right = leftAndRight._2
+        left.quickSorted(ordering) ++ (head :: right.quickSorted(ordering))
+    }
   }
 }
 
