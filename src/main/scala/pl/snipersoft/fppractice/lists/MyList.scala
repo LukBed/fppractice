@@ -237,23 +237,9 @@ case class ::[+T](override val head: T, override val tail: MyList[T]) extends My
   }
 
   override def sample(n: Int): MyList[T] = {
-    if (n <= 0) return MyNil
-
     val random = new Random(System.currentTimeMillis())
-    val maxIndex = length
-
-    def randomElement(): T = {
-      val index = random.nextInt(maxIndex)
-      apply(index)
-    }
-
-    @tailrec
-    def tailRec(i: Int, acc: MyList[T]): MyList[T] = {
-      if (i == 0) return acc
-      tailRec(i-1, randomElement() :: acc)
-    }
-
-    tailRec(n, MyNil)
+    val l = length
+    MyList.from(0 until n).map(_ => apply(random.nextInt(l)))
   }
 }
 
