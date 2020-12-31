@@ -3,7 +3,7 @@ package pl.snipersoft.fppractice.lists
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
-class MyListRemoveAtTests extends AnyFunSuite with Matchers {
+class RemoveAtTests extends AnyFunSuite with Matchers {
   test("should remove element with defined index from list") {
     val list = "a" :: "b" :: "c" :: "d" :: MyNil
     list.removeAt(0) shouldBe "b" :: "c" :: "d" :: MyNil

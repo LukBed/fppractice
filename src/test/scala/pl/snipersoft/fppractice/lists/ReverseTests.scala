@@ -3,7 +3,7 @@ package pl.snipersoft.fppractice.lists
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
-class MyListReverseTests extends AnyFunSuite with Matchers {
+class ReverseTests extends AnyFunSuite with Matchers {
   test("should reverse three-elements list") {
     val list = "a" :: "b" :: "c" :: MyNil
     val reversed = "c" :: "b" :: "a" :: MyNil
