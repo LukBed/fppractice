@@ -43,6 +43,10 @@ sealed abstract class MyList[+T] {
   def sample(n: Int): MyList[T]
 
   def insertionSorted[S >: T](ordering: Ordering[S]): MyList[S]
+
+  def mergeSorted[S >: T](ordering: Ordering[S]): MyList[S]
+
+  def quickSorted[S >: T](ordering: Ordering[S]): MyList[S]
 }
 
 case object MyNil extends MyList[Nothing] {
@@ -83,6 +87,10 @@ case object MyNil extends MyList[Nothing] {
   override def sample(n: Int): MyList[Nothing] = this
 
   override def insertionSorted[S >: Nothing](ordering: Ordering[S]): MyList[Nothing] = this
+
+  override def mergeSorted[S >: Nothing](ordering: Ordering[S]): MyList[Nothing] = this
+
+  override def quickSorted[S >: Nothing](ordering: Ordering[S]): MyList[Nothing] = this
 }
 
 case class ::[+T](override val head: T, override val tail: MyList[T]) extends MyList[T] {
@@ -153,7 +161,7 @@ case class ::[+T](override val head: T, override val tail: MyList[T]) extends My
     def tailRec(todo: MyList[T], acc: MyList[T], n: Int): MyList[T] = {
       if (todo.isEmpty) return this
       if (n == 0) return acc.reverse ++ todo.tail
-      tailRec(todo.tail, todo.head :: acc, n-1)
+      tailRec(todo.tail, todo.head :: acc, n - 1)
     }
 
     if (index < 0) return this
@@ -230,7 +238,7 @@ case class ::[+T](override val head: T, override val tail: MyList[T]) extends My
     @tailrec
     def duplicateElementTailRec(elem: T, i: Int, acc: MyList[T]): MyList[T] = {
       if (i == 0) return acc
-      duplicateElementTailRec(elem, i-1, elem :: acc)
+      duplicateElementTailRec(elem, i - 1, elem :: acc)
     }
 
     flatMap(duplicateElement)
@@ -241,10 +249,10 @@ case class ::[+T](override val head: T, override val tail: MyList[T]) extends My
     def tailRec(i: Int, todo: MyList[T], acc: MyList[T]): MyList[T] = {
       if (i == 0) return todo ++ acc.reverse
       if (todo.isEmpty) throw new IllegalArgumentException
-      tailRec(i-1, todo.tail, todo.head :: acc)
+      tailRec(i - 1, todo.tail, todo.head :: acc)
     }
 
-    if (n<0) throw new IllegalArgumentException
+    if (n < 0) throw new IllegalArgumentException
     tailRec(n, this, MyNil)
   }
 
@@ -264,11 +272,58 @@ case class ::[+T](override val head: T, override val tail: MyList[T]) extends My
     @tailrec
     def addElement(elem: S, todo: MyList[S], acc: MyList[S] = MyNil): MyList[S] = {
       if (todo.isEmpty) return (elem :: acc).reverse
-      if (ordering.gteq(todo.head, elem)) return  (elem :: acc).reverse ++ todo
+      if (ordering.gteq(todo.head, elem)) return (elem :: acc).reverse ++ todo
       addElement(elem, todo.tail, todo.head :: acc)
     }
 
     tailRec(this, MyNil)
+  }
+
+  override def mergeSorted[S >: T](ordering: Ordering[S]): MyList[S] = {
+    def splitIntoTwoParts(input: MyList[S]): (MyList[S], MyList[S]) = {
+      @tailrec
+      def splitIntoTwoPartsTailRec(i: Int, todo: MyList[S], acc: MyList[S] = MyNil): (MyList[S], MyList[S]) = {
+        if (i == 0) return (acc.reverse, todo)
+        splitIntoTwoPartsTailRec(i-1, todo.tail, todo.head :: acc)
+      }
+
+      splitIntoTwoPartsTailRec(input.length/2, input)
+    }
+
+    def doIt(input: MyList[S]): MyList[S] = {
+      if (input.isEmpty || input.tail.isEmpty) return input
+      val parts = splitIntoTwoParts(input)
+
+      val sortedFirst = doIt(parts._1)
+      val sortedSecond = doIt(parts._2)
+
+      join(sortedFirst, sortedSecond)
+    }
+
+    //jak są 2 elementy to sortujemy
+
+    def join(l1: MyList[S], l2: MyList[S]): MyList[S] = {
+      @tailrec
+      def addElement(elem: S, todo: MyList[S], acc: MyList[S] = MyNil): MyList[S] = {
+        if (todo.isEmpty) return (elem :: acc).reverse
+        if (ordering.gteq(todo.head, elem)) return (elem :: acc).reverse ++ todo
+        addElement(elem, todo.tail, todo.head :: acc)
+      }
+
+      @tailrec
+      def addAllElements(todo: MyList[S], acc: MyList[S]): MyList[S] = {
+        if (todo.isEmpty) return acc
+        addAllElements(todo.tail, addElement(todo.head, acc))
+      }
+
+      addAllElements(l2, l1)
+    }
+
+    doIt(this)
+  }
+
+  override def quickSorted[S >: T](ordering: Ordering[S]): MyList[S] = {
+    ???
   }
 }
 
