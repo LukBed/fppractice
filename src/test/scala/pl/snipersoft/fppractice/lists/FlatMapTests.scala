@@ -22,4 +22,9 @@ class FlatMapTests extends AnyFunSuite with Matchers {
     val function = (i: Int) => List(i, i*11, i*111)
     list.flatMap(function).length shouldBe 3000000
   }
+
+  val rockList = MyList.from(1 to 10000)
+  test("should flat map the rock the JVM list") {
+    rockList.flatMap(x => x :: x*2 :: MyNil)
+  }
 }
