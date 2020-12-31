@@ -42,7 +42,7 @@ sealed abstract class MyList[+T] {
 
   def sample(n: Int): MyList[T]
 
-  def sorted[S >: T](ordering: Ordering[S]): MyList[S]
+  def insertionSorted[S >: T](ordering: Ordering[S]): MyList[S]
 }
 
 case object MyNil extends MyList[Nothing] {
@@ -82,7 +82,7 @@ case object MyNil extends MyList[Nothing] {
 
   override def sample(n: Int): MyList[Nothing] = this
 
-  override def sorted[S >: Nothing](ordering: Ordering[S]): MyList[Nothing] = this
+  override def insertionSorted[S >: Nothing](ordering: Ordering[S]): MyList[Nothing] = this
 }
 
 case class ::[+T](override val head: T, override val tail: MyList[T]) extends MyList[T] {
@@ -254,7 +254,7 @@ case class ::[+T](override val head: T, override val tail: MyList[T]) extends My
     MyList.from(0 until n).map(_ => apply(random.nextInt(l)))
   }
 
-  override def sorted[S >: T](ordering: Ordering[S]): MyList[S] = {
+  override def insertionSorted[S >: T](ordering: Ordering[S]): MyList[S] = {
     @tailrec
     def tailRec(todo: MyList[S], acc: MyList[S]): MyList[S] = {
       if (todo.isEmpty) return acc
