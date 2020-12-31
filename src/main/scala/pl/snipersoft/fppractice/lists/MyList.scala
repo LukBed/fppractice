@@ -280,15 +280,15 @@ case class ::[+T](override val head: T, override val tail: MyList[T]) extends My
   }
 
   override def mergeSorted[S >: T](ordering: Ordering[S]): MyList[S] = {
-        @tailrec
+    @tailrec
     def tailRec(smallLists: MyList[MyList[S]], bigLists: MyList[MyList[S]]): MyList[S] = {
-      if (smallLists.isEmpty && bigLists.isEmpty) MyNil
-      else if (smallLists.isEmpty && bigLists.tail.isEmpty) bigLists.head
-      else if (smallLists.isEmpty) tailRec(bigLists, MyNil)
-      else if (smallLists.tail.isEmpty) tailRec(smallLists.head :: bigLists, MyNil)
-      else {
-        val newList = join(smallLists.head, smallLists.tail.head)
-        tailRec(smallLists.tail.tail, newList :: bigLists)
+      (smallLists, bigLists) match {
+        case (MyNil, MyNil) => MyNil
+        case (MyNil, _ :: MyNil) => bigLists.head
+        case (MyNil, _) => tailRec(bigLists, MyNil)
+        case (_ :: MyNil, _) => tailRec(smallLists.head :: bigLists, MyNil)
+        case _ => val newList = join(smallLists.head, smallLists.tail.head)
+                tailRec(smallLists.tail.tail, newList :: bigLists)
       }
     }
 
