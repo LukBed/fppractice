@@ -1,6 +1,7 @@
 package pl.snipersoft.fppractice.lists
 
 import scala.annotation.tailrec
+import scala.util.Random
 
 sealed abstract class MyList[+T] {
   def head: T
@@ -38,6 +39,8 @@ sealed abstract class MyList[+T] {
   def duplicateEach(n: Int): MyList[T]
 
   def rotate(n: Int): MyList[T]
+
+  def sample(n: Int): MyList[T]
 }
 
 case object MyNil extends MyList[Nothing] {
@@ -74,6 +77,8 @@ case object MyNil extends MyList[Nothing] {
   override def duplicateEach(n: Int): MyList[Nothing] = this
 
   override def rotate(n: Int): MyList[Nothing] = this
+
+  override def sample(n: Int): MyList[Nothing] = this
 }
 
 case class ::[+T](override val head: T, override val tail: MyList[T]) extends MyList[T] {
@@ -229,6 +234,26 @@ case class ::[+T](override val head: T, override val tail: MyList[T]) extends My
 
     if (n<0) throw new IllegalArgumentException
     tailRec(n, this, MyNil)
+  }
+
+  override def sample(n: Int): MyList[T] = {
+    if (n <= 0) return MyNil
+
+    val random = new Random(System.currentTimeMillis())
+    val maxIndex = length
+
+    def randomElement(): T = {
+      val index = random.nextInt(maxIndex)
+      apply(index)
+    }
+
+    @tailrec
+    def tailRec(i: Int, acc: MyList[T]): MyList[T] = {
+      if (i == 0) return acc
+      tailRec(i-1, randomElement() :: acc)
+    }
+
+    tailRec(n, MyNil)
   }
 }
 

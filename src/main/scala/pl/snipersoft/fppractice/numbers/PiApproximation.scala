@@ -7,7 +7,7 @@ import scala.util.Random
 //and check how much points are inside circle with radius 1
 //points inside / total points = area of circle / area of square = Pi / 4
 object PiApproximation {
-  val randomGenerator = new Random()
+  val randomGenerator = new Random(System.currentTimeMillis())
 
   def apply(points: Int): Double = {
     @tailrec
