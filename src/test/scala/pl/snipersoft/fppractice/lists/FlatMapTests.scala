@@ -16,4 +16,10 @@ class FlatMapTests extends AnyFunSuite with Matchers {
     val function = (i: Int) => i :: i*11 :: i*111 :: MyNil
     list.flatMap(function).length shouldBe 3000000
   }
+
+  test("should flat map the Scala list (for time comparison)") {
+    val list = (1 to 1000000).toList
+    val function = (i: Int) => List(i, i*11, i*111)
+    list.flatMap(function).length shouldBe 3000000
+  }
 }
