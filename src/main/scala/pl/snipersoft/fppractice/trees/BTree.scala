@@ -1,5 +1,7 @@
 package pl.snipersoft.fppractice.trees
 
+import scala.annotation.tailrec
+
 //binary tree
 sealed abstract class BTree[+T] {
   def value: T
@@ -10,10 +12,9 @@ sealed abstract class BTree[+T] {
   def rightOption: Option[BTree[T]]
   def isEmpty: Boolean
 
-  //leaf is tree without node
   def isLeaf: Boolean
   def collectLeaves: List[BTree[T]]
-  def leafCount: Int
+  def leafCount: Int = collectLeaves.size
 }
 
 case object BEnd extends BTree[Nothing] {
@@ -25,8 +26,7 @@ case object BEnd extends BTree[Nothing] {
   override def rightOption: Option[BTree[Nothing]] = None
   override def isEmpty = true
   override def isLeaf = false
-  override def collectLeaves: List[BTree[Nothing]] = ???
-  override def leafCount: Int = ???
+  override def collectLeaves: List[BTree[Nothing]] = Nil
 }
 
 case class BNode[+T](override val value: T,
@@ -37,6 +37,17 @@ case class BNode[+T](override val value: T,
   override def rightOption: Option[BTree[T]] = Some(right)
   override def isEmpty = false
   override def isLeaf: Boolean = left.isEmpty && right.isEmpty
-  override def collectLeaves: List[BTree[T]] = ???
-  override def leafCount: Int = ???
+  override def collectLeaves: List[BTree[T]] = {
+    @tailrec
+    def tailRec(remaining: List[BTree[T]], acc: List[BTree[T]]): List[BTree[T]] = {
+      remaining match {
+        case h :: t if h.isLeaf => tailRec(t, h :: acc)
+        case h :: t if h.isEmpty => tailRec(t, acc)
+        case h :: t => tailRec(h.left :: h.right :: t, acc)
+        case _ => acc
+      }
+    }
+
+    tailRec(List(this), Nil)
+  }
 }
