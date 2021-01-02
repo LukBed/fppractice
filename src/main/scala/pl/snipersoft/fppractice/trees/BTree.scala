@@ -17,6 +17,7 @@ sealed abstract class BTree[+T] {
   def leafCount: Int = collectLeaves.size
   def size: Int
   def collectNodes(n: Int): List[BTree[T]]
+  def mirror: BTree[T]
 }
 
 case object BEnd extends BTree[Nothing] {
@@ -31,6 +32,7 @@ case object BEnd extends BTree[Nothing] {
   override def collectLeaves: List[BTree[Nothing]] = Nil
   override def size: Int = 0
   override def collectNodes(n: Int): List[Nothing] = Nil
+  override def mirror: BTree[Nothing] = this
 }
 
 case class BNode[+T](override val value: T,
@@ -79,5 +81,9 @@ case class BNode[+T](override val value: T,
 
     if (n<0) return Nil
     tailRec(List(this), n)
+  }
+
+  override def mirror: BTree[T] = {
+    copy(left = right.mirror, right = left.mirror)
   }
 }
