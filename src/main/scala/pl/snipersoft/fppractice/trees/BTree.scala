@@ -16,6 +16,7 @@ sealed abstract class BTree[+T] {
   def collectLeaves: List[BTree[T]]
   def leafCount: Int = collectLeaves.size
   def size: Int
+  def collectNodes(n: Int): List[BTree[T]]
 }
 
 case object BEnd extends BTree[Nothing] {
@@ -29,6 +30,7 @@ case object BEnd extends BTree[Nothing] {
   override def isLeaf = false
   override def collectLeaves: List[BTree[Nothing]] = Nil
   override def size: Int = 0
+  override def collectNodes(n: Int): List[Nothing] = Nil
 }
 
 case class BNode[+T](override val value: T,
@@ -65,5 +67,17 @@ case class BNode[+T](override val value: T,
     }
 
     tailRec(List(left, right), 0)
+  }
+
+  override def collectNodes(n: Int): List[BTree[T]] = {
+    @tailrec
+    def tailRec(nodes: List[BTree[T]], i: Int): List[BTree[T]] = {
+      if (i <= 0) return nodes
+      val newNodes = nodes.flatMap(t => List(t.left, t.right)).filter(!_.isEmpty)
+      tailRec(newNodes, i-1)
+    }
+
+    if (n<0) return Nil
+    tailRec(List(this), n)
   }
 }

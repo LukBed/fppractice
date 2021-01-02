@@ -1,6 +1,16 @@
 package pl.snipersoft.fppractice.trees
 
 object Trees {
+  /*
+       _____a____
+      /          \
+     __aa_       ab
+    /     \       |
+   _aaa_   aab    aba
+  /     \
+  aaaa  aaab
+   */
+
   val aba = BNode("aba")
   val ab = BNode("ab", aba)
   val aaab = BNode("aaab")
