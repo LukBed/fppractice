@@ -2,26 +2,23 @@ package pl.snipersoft.fppractice.trees
 
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
+import org.scalatest.prop.TableDrivenPropertyChecks._
 
 class CollectLeavesTests extends AnyFunSuite with Matchers {
+  val data = Table(("nr", "tree", "leaves"),
+    (1, Trees.a, List(Trees.aaaa, Trees.aaab, Trees.aab, Trees.aba)),
+    (2, Trees.aa, List(Trees.aaaa, Trees.aaab, Trees.aab)),
+    (3, Trees.ab, List(Trees.aba)))
+
   test("empty tree should not have leaves") {
     BEnd.collectLeaves shouldBe List.empty
     BEnd.leafCount shouldBe 0
   }
 
-  test("should find leaves") {
-    val h = BNode("h")
-    val g = BNode("g", h)
-    val f = BNode("f")
-    val e = BNode("e")
-    val d = BNode("d")
-    val c = BNode("c", e, f)
-    val b = BNode("b", c, d)
-    val a = BNode("a", b, g)
-    val expectedLeaves = List(e, f, d, h)
-
-    a.collectLeaves should contain theSameElementsAs expectedLeaves
-    a.leafCount shouldBe 4
+  forAll(data) { (nr: Int, tree: BTree[String], leaves: List[BTree[String]]) =>
+    test(s"should find leaves - case $nr") {
+      tree.collectLeaves should contain theSameElementsAs leaves
+      tree.leafCount shouldBe leaves.size
+    }
   }
-
 }

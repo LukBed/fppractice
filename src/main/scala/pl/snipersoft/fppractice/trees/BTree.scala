@@ -15,6 +15,7 @@ sealed abstract class BTree[+T] {
   def isLeaf: Boolean
   def collectLeaves: List[BTree[T]]
   def leafCount: Int = collectLeaves.size
+  def size: Int
 }
 
 case object BEnd extends BTree[Nothing] {
@@ -27,6 +28,7 @@ case object BEnd extends BTree[Nothing] {
   override def isEmpty = true
   override def isLeaf = false
   override def collectLeaves: List[BTree[Nothing]] = Nil
+  override def size: Int = 0
 }
 
 case class BNode[+T](override val value: T,
@@ -37,6 +39,7 @@ case class BNode[+T](override val value: T,
   override def rightOption: Option[BTree[T]] = Some(right)
   override def isEmpty = false
   override def isLeaf: Boolean = left.isEmpty && right.isEmpty
+
   override def collectLeaves: List[BTree[T]] = {
     @tailrec
     def tailRec(remaining: List[BTree[T]], acc: List[BTree[T]]): List[BTree[T]] = {
@@ -49,5 +52,18 @@ case class BNode[+T](override val value: T,
     }
 
     tailRec(List(this), Nil)
+  }
+
+  override def size: Int = {
+    @tailrec
+    def tailRec(remaining: List[BTree[T]], acc: Int): Int = {
+      remaining match {
+        case Nil => acc
+        case BEnd :: _ => tailRec(remaining.tail, acc)
+        case h :: t => tailRec(h.left :: h.right :: t, acc+1)
+      }
+    }
+
+    tailRec(List(left, right), 0)
   }
 }
