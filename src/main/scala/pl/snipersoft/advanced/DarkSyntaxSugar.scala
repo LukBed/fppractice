@@ -30,7 +30,7 @@ object SpecialMethods extends App {
   val myStream = 1 -->: 2 -->: 3 -->: new MyStream[Int]
 }
 
-object MultiWordMethodNaming {
+object MultiWordMethodNaming extends App {
   case class TeenGirl(name: String) {
     def `and then said`(gossip: String) = println(s"$name said $gossip")
   }
@@ -39,7 +39,7 @@ object MultiWordMethodNaming {
   marysia `and then said` "I like Scala"
 }
 
-object InfixTypes {
+object InfixTypes extends App {
   class Composite[A, B]
   val firstComposite: Composite[Int, String] = ???
   val secondComposite: Int Composite String = ???
@@ -48,12 +48,12 @@ object InfixTypes {
   val towards: Int --> String = ???
 }
 
-object UpdateMethod { //used in mutable collections
+object UpdateMethod extends App { //used in mutable collections
   val anArray = Array(1,2,3)
   anArray(2) = 7 // anArray.update(2,7)
 }
 
-object Setters {
+object Setters extends App {
   class Mutable {
     private var internalMember: Int = 0
     def member = internalMember //getter
