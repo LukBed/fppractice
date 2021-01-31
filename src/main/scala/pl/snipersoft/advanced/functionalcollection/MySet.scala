@@ -3,6 +3,10 @@ package pl.snipersoft.advanced.functionalcollection
 import scala.annotation.tailrec
 
 sealed trait MySet[A] extends (A => Boolean) {
+  def apply(elem: A): Boolean = contains(elem)
+
+  def unary_! : MySet[A]
+
   def contains(elem: A): Boolean
   def +(elem: A): MySet[A]
   def ++(anotherSet: MySet[A]): MySet[A] //union
@@ -28,8 +32,8 @@ object MySet {
   }
 }
 
-private case class EmptySet[A]() extends MySet[A] {
-  override def apply(elem: A): Boolean = contains(elem)
+case class EmptySet[A]() extends MySet[A] {
+  override def unary_! : MySet[A] = PropertyBasedSet(_ => true)
 
   override def contains(elem: A) = false
   override def +(elem: A): MySet[A] = NonEmptySet(elem, this)
@@ -45,8 +49,8 @@ private case class EmptySet[A]() extends MySet[A] {
   override def foreach(f: A => Unit): Unit = ()
 }
 
-private case class NonEmptySet[A](head: A, tail: MySet[A]) extends MySet[A] {
-  override def apply(elem: A): Boolean = contains(elem)
+case class NonEmptySet[A](head: A, tail: MySet[A]) extends MySet[A] {
+  override def unary_! : MySet[A] = PropertyBasedSet(x => !this(x))
 
   override def contains(elem: A): Boolean = elem == head || tail.contains(elem)
 
@@ -78,4 +82,24 @@ private case class NonEmptySet[A](head: A, tail: MySet[A]) extends MySet[A] {
     f(head)
     tail foreach f
   }
+}
+
+case class PropertyBasedSet[A](property: A => Boolean) extends MySet[A] {
+  override def unary_! : MySet[A] = PropertyBasedSet(x => !this(x))
+
+  override def contains(elem: A): Boolean = property(elem)
+  override def +(elem: A): MySet[A] = if (this(elem)) this else PropertyBasedSet(x => this(x) || elem == x)
+  override def ++(anotherSet: MySet[A]): MySet[A] = PropertyBasedSet(x => this(x) || anotherSet(x))
+
+  override def -(elem: A): MySet[A] = filter(x => x != elem)
+  override def --(anotherSet: MySet[A]): MySet[A] = filter(!anotherSet)
+  override def &(anotherSet: MySet[A]): MySet[A] = filter(anotherSet)
+
+  override def map[B](f: A => B): MySet[B] = politelyFail
+  override def flatMap[B](f: A => MySet[B]): MySet[B] = politelyFail
+  override def filter(predicate: A => Boolean): MySet[A] = PropertyBasedSet(x => this(x) || predicate(x))
+
+  override def foreach(f: A => Unit): Unit = politelyFail
+
+  private def politelyFail = throw new IllegalArgumentException("Really deep rabit hole")
 }
