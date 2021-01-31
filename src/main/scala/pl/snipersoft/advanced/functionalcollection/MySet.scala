@@ -5,16 +5,16 @@ import scala.annotation.tailrec
 sealed trait MySet[A] extends (A => Boolean) {
   def contains(elem: A): Boolean
   def +(elem: A): MySet[A]
-  def ++(anotherSet: MySet[A]): MySet[A]
+  def ++(anotherSet: MySet[A]): MySet[A] //union
+
   def -(elem: A): MySet[A]
+  def --(anotherSet: MySet[A]): MySet[A] //difference
+  def &(anotherSet: MySet[A]): MySet[A] //intersection
 
   def map[B](f: A => B): MySet[B]
   def flatMap[B](f: A => MySet[B]): MySet[B]
   def filter(predicate: A => Boolean): MySet[A]
   def foreach(f: A => Unit): Unit
-
-  def intersect(anotherSet: MySet[A]): MySet[A]
-  def difference(anotherSet: MySet[A]): MySet[A]
 }
 
 object MySet {
@@ -34,15 +34,15 @@ private case class EmptySet[A]() extends MySet[A] {
   override def contains(elem: A) = false
   override def +(elem: A): MySet[A] = NonEmptySet(elem, this)
   override def ++(anotherSet: MySet[A]): MySet[A] = anotherSet
+
   override def -(elem: A): MySet[A] = this
+  override def --(anotherSet: MySet[A]): MySet[A] = this
+  override def &(anotherSet: MySet[A]): MySet[A] = this
 
   override def map[B](f: A => B): EmptySet[B] = EmptySet()
   override def flatMap[B](f: A => MySet[B]): MySet[B] = EmptySet()
   override def filter(predicate: A => Boolean): MySet[A] = EmptySet()
   override def foreach(f: A => Unit): Unit = ()
-
-  override def intersect(anotherSet: MySet[A]): MySet[A] = this
-  override def difference(anotherSet: MySet[A]): MySet[A] = anotherSet
 }
 
 private case class NonEmptySet[A](head: A, tail: MySet[A]) extends MySet[A] {
@@ -58,7 +58,11 @@ private case class NonEmptySet[A](head: A, tail: MySet[A]) extends MySet[A] {
 
   override def -(elem: A): MySet[A] =
     if (head == elem) tail - elem
-    else (tail - elem) + head
+    else tail - elem + head
+
+  override def &(anotherSet: MySet[A]): MySet[A] = filter(anotherSet)
+
+  override def --(anotherSet: MySet[A]): MySet[A] = filter(x => !anotherSet(x))
 
   override def map[B](f: A => B): MySet[B] = (tail map f) + f(head)
 
@@ -73,31 +77,5 @@ private case class NonEmptySet[A](head: A, tail: MySet[A]) extends MySet[A] {
   override def foreach(f: A => Unit): Unit = {
     f(head)
     tail foreach f
-  }
-
-  override def intersect(anotherSet: MySet[A]): MySet[A] = {
-    @tailrec
-    def tailRec(toCheck: MySet[A], acc: MySet[A]): MySet[A] = {
-      toCheck match {
-        case NonEmptySet(h, t) if anotherSet(h) => tailRec(t, acc + h)
-        case NonEmptySet(_, t) => tailRec(t, acc)
-        case EmptySet() => acc
-      }
-    }
-
-    tailRec(this, EmptySet())
-  }
-
-  override def difference(anotherSet: MySet[A]): MySet[A] = {
-    @tailrec
-    def tailRec(toCheck: MySet[A], acc: MySet[A]): MySet[A] = {
-      toCheck match {
-        case NonEmptySet(h, t) if this(h) && anotherSet(h) => tailRec(t, acc)
-        case NonEmptySet(h, t) => tailRec(t, acc + h)
-        case EmptySet() => acc
-      }
-    }
-
-    tailRec(this ++ anotherSet, EmptySet())
   }
 }
