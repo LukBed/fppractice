@@ -101,4 +101,42 @@ class MySetSpec extends AnyFunSuite with Matchers {
     text contains "b" shouldBe true
     text contains "c" shouldBe true
   }
+
+  test("should remove element") {
+    val abSet = abcSet - "b"
+    abSet("a") shouldBe true
+    abSet("c") shouldBe true
+    abSet("b") shouldBe false
+
+    MySet() - "b" shouldBe MySet()
+
+    abcSet - "d" shouldBe abcSet
+  }
+
+  test("should intersect two sets") {
+    val firstSet = MySet("a", "b", "c", "d")
+    val secondSet = MySet("a", "c", "e", "f")
+    val intersection = firstSet intersect secondSet
+
+    intersection("a") shouldBe true
+    intersection("c") shouldBe true
+    intersection("b") shouldBe false
+    intersection("d") shouldBe false
+    intersection("e") shouldBe false
+    intersection("f") shouldBe false
+  }
+
+  test("should find differences between two sets") {
+    val firstSet = MySet("a", "b", "c", "d")
+    val secondSet = MySet("a", "c", "e", "f")
+    val differences = firstSet difference secondSet
+
+    differences("a") shouldBe false
+    differences("b") shouldBe true
+    differences("c") shouldBe false
+    differences("d") shouldBe true
+    differences("e") shouldBe true
+    differences("f") shouldBe true
+    differences("g") shouldBe false
+  }
 }
