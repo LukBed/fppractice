@@ -4,21 +4,21 @@ import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
 class MySetSpec extends AnyFunSuite with Matchers {
-  val abcSet: MySet[String] = NonEmptySet("a", NonEmptySet("b", NonEmptySet("c", EmptySet())))
-  val fiveSet: MySet[Int] = NonEmptySet(1, NonEmptySet(2, NonEmptySet(3, NonEmptySet(4, NonEmptySet(5, EmptySet())))))
+  val abcSet: MySet[String] = MySet("a", "b", "c")
+  val fiveSet: MySet[Int] = MySet(1,2,3,4,5)
 
   test("should check if set contains element") {
-    abcSet.contains("a") shouldBe true
+    abcSet contains "a" shouldBe true
     abcSet("a") shouldBe true
-    abcSet.contains("b") shouldBe true
+    abcSet contains "b" shouldBe true
     abcSet("b") shouldBe true
-    abcSet.contains("c") shouldBe true
+    abcSet contains "c" shouldBe true
     abcSet("c") shouldBe true
-    abcSet.contains("d") shouldBe false
+    abcSet contains "d" shouldBe false
     abcSet("d") shouldBe false
 
-    EmptySet().contains("a") shouldBe false
-    EmptySet()("a") shouldBe false
+    MySet() contains "a" shouldBe false
+    MySet()("a") shouldBe false
   }
 
   test("should add element to set") {
@@ -31,14 +31,14 @@ class MySetSpec extends AnyFunSuite with Matchers {
 
     abcSet + "a" shouldBe abcSet
 
-    val oneElementSet = EmptySet() + "a"
+    val oneElementSet = MySet() + "a"
     oneElementSet("a") shouldBe true
     oneElementSet("b") shouldBe false
   }
 
   test("should add set to set") {
-    val setToBeAdded = NonEmptySet("c", NonEmptySet("d", NonEmptySet("e", EmptySet())))
-    EmptySet() ++ setToBeAdded shouldBe setToBeAdded
+    val setToBeAdded = MySet("c", "d", "e")
+    MySet() ++ setToBeAdded shouldBe setToBeAdded
 
     val joinedSets = abcSet ++ setToBeAdded
     joinedSets("a") shouldBe true
@@ -51,7 +51,7 @@ class MySetSpec extends AnyFunSuite with Matchers {
 
   test("should map set") {
     val mapFunction: String => String = (text: String) => text + "a"
-    val mappedSet = abcSet.map(mapFunction)
+    val mappedSet = abcSet map mapFunction
 
     mappedSet("a") shouldBe false
     mappedSet("b") shouldBe false
@@ -60,12 +60,12 @@ class MySetSpec extends AnyFunSuite with Matchers {
     mappedSet("ba") shouldBe true
     mappedSet("ca") shouldBe true
 
-    EmptySet().map(mapFunction) shouldBe EmptySet()
+    MySet() map mapFunction shouldBe MySet()
   }
 
   test("should flat map set") {
-    val mapFunction: String => MySet[String] = (text: String) => NonEmptySet(text, NonEmptySet(text + "a", EmptySet()))
-    val mappedSet = abcSet.flatMap(mapFunction)
+    val mapFunction: String => MySet[String] = (text: String) => MySet(text, text + "a")
+    val mappedSet = abcSet flatMap mapFunction
 
     mappedSet("a") shouldBe true
     mappedSet("b") shouldBe true
@@ -76,26 +76,29 @@ class MySetSpec extends AnyFunSuite with Matchers {
     mappedSet("ca") shouldBe true
     mappedSet("da") shouldBe false
 
-    EmptySet().flatMap(mapFunction) shouldBe EmptySet()
+    MySet() flatMap mapFunction shouldBe MySet()
   }
 
   test("should filter set") {
     val filterFunction = (n: Int) => n%2 == 1
-    val filteredSet = fiveSet.filter(filterFunction)
+    val filteredSet = fiveSet filter filterFunction
     filteredSet(1) shouldBe true
     filteredSet(3) shouldBe true
     filteredSet(5) shouldBe true
     filteredSet(2) shouldBe false
     filteredSet(4) shouldBe false
 
-    EmptySet().filter(filterFunction) shouldBe EmptySet()
+    MySet() filter filterFunction shouldBe MySet()
   }
 
   test("should execute action foreach") {
     var text = ""
     val action = (s: String) => text +=  s
-    abcSet.foreach(action)
+    abcSet foreach action
 
-    text shouldBe "abc"
+    text.length shouldBe 3
+    text contains "a" shouldBe true
+    text contains "b" shouldBe true
+    text contains "c" shouldBe true
   }
 }
