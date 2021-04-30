@@ -3,7 +3,7 @@ package pl.snipersoft.fppractice.lists
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
-class RotateTests extends AnyFunSuite with Matchers {
+class RotateSpec extends AnyFunSuite with Matchers {
   val list = 1 :: 2 :: 3 :: 4 :: 5 :: 6 :: 7 :: 8 :: 9 :: 10 :: MyNil
 
   test("should rotate list") {

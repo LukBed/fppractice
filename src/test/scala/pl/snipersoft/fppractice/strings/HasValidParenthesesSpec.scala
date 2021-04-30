@@ -6,7 +6,7 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import StringUtils._
 
-class HasValidParenthesesTests extends AnyFunSuite with Matchers {
+class HasValidParenthesesSpec extends AnyFunSuite with Matchers {
   val validParentheses = Table("input", "()", "()()", "(())")
   val invalidParentheses = Table("input", ")(", "))((", ")(()", "()()(", "())(")
   val invalidFormat = Table("input", "a", "(a)")

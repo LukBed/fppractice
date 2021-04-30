@@ -4,7 +4,7 @@ import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 import NumbersUtils._
 
-class DecomposeTests extends AnyFunSuite with Matchers {
+class DecomposeSpec extends AnyFunSuite with Matchers {
   test("should decompose positive number") {
     25.decompose shouldBe List(1, 5, 25)
     1.decompose shouldBe List(1)

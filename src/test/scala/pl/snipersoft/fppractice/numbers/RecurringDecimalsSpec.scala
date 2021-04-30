@@ -4,7 +4,7 @@ import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks._
 
-class RecurringDecimalsTests extends AnyFunSuite with Matchers {
+class RecurringDecimalsSpec extends AnyFunSuite with Matchers {
   val data = Table(
     ("numerator", "denominator", "result"),
     (1, 3, "0.(3)"),

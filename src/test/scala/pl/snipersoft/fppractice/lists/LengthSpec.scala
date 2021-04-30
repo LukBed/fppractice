@@ -3,7 +3,7 @@ package pl.snipersoft.fppractice.lists
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
-class LengthTests extends AnyFunSuite with Matchers {
+class LengthSpec extends AnyFunSuite with Matchers {
   test("should calculate correct length for multi-elements list") {
     val list = "a" :: "b" :: "c" :: MyNil
     list.length shouldBe 3

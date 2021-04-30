@@ -3,7 +3,7 @@ package pl.snipersoft.fppractice.trees
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
-class IsLeafTests extends AnyFunSuite with Matchers {
+class IsLeafSpec extends AnyFunSuite with Matchers {
   test("empty tree should not be leaf") {
     BEnd.isLeaf shouldBe false
   }

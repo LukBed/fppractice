@@ -4,7 +4,7 @@ import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks._
 
-class SizeTests extends AnyFunSuite with Matchers {
+class SizeSpec extends AnyFunSuite with Matchers {
   val data = Table(("nr", "tree", "size"),
     (1, Trees.a, 7),
     (2, Trees.aa, 4),

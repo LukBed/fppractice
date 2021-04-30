@@ -3,7 +3,7 @@ package pl.snipersoft.fppractice.trees
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
-class MirrorTests extends AnyFunSuite with Matchers {
+class MirrorSpec extends AnyFunSuite with Matchers {
   test("should mirror the tree") {
     /*
        _____a_____

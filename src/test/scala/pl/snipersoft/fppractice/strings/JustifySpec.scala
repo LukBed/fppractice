@@ -5,7 +5,7 @@ import org.scalatest.matchers.should.Matchers
 
 import StringUtils._
 
-class JustifyTests extends AnyFunSuite with Matchers {
+class JustifySpec extends AnyFunSuite with Matchers {
   test("should justify text") {
     val input = "Abc def gh ijklmn op rstuw xyza. Bcd efghij kl mn opr stu."
     val expected =

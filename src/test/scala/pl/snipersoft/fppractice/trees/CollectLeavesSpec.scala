@@ -4,7 +4,7 @@ import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks._
 
-class CollectLeavesTests extends AnyFunSuite with Matchers {
+class CollectLeavesSpec extends AnyFunSuite with Matchers {
   val data = Table(("nr", "tree", "leaves"),
     (1, Trees.a, List(Trees.aaaa, Trees.aaab, Trees.aab, Trees.aba)),
     (2, Trees.aa, List(Trees.aaaa, Trees.aaab, Trees.aab)),

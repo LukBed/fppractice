@@ -5,7 +5,7 @@ import org.scalatest.matchers.should.Matchers
 
 import org.scalatest.prop.TableDrivenPropertyChecks._
 
-class GenerateAllValidParenthesesTests extends AnyFunSuite with Matchers {
+class GenerateAllValidParenthesesSpec extends AnyFunSuite with Matchers {
   val data = Table(("length", "expectedParentheses"),
     (0, List()),
     (1, List("()")),

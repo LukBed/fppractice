@@ -6,7 +6,7 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import StringUtils._
 
-class CountCharactersTests extends AnyFunSuite with Matchers {
+class CountCharactersSpec extends AnyFunSuite with Matchers {
   val data = Table(
     ("input", "expected"),
     ("Scala", Map('S' -> 1, 'c' -> 1, 'a' -> 2, 'l' -> 1)),

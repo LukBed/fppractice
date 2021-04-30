@@ -4,16 +4,16 @@ import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks._
 
-class MergeSortedTests extends SortedTests("merge sorting",
+class MergeSortedSpec extends SortedSpec("merge sorting",
   (l: MyList[Int], o: Ordering[Int]) => l.mergeSorted(o))
 
-class InsertionSortedTests extends SortedTests("insertion sorting",
+class InsertionSortedSpec extends SortedSpec("insertion sorting",
   (l: MyList[Int], o: Ordering[Int]) => l.insertionSorted(o))
 
-class QuickSortedTests extends SortedTests("quick sorting",
+class QuickSortedSpec extends SortedSpec("quick sorting",
   (l: MyList[Int], o: Ordering[Int]) => l.quickSorted(o))
 
-abstract class SortedTests(val sortingType: String, val sort: (MyList[Int], Ordering[Int]) => MyList[Int])
+abstract class SortedSpec(val sortingType: String, val sort: (MyList[Int], Ordering[Int]) => MyList[Int])
   extends AnyFunSuite with Matchers {
   val ordering = Ordering.fromLessThan[Int](_ < _)
   val unsortedLists = Table(("nr", "list"),

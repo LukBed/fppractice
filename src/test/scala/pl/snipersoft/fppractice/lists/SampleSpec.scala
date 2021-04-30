@@ -3,7 +3,7 @@ package pl.snipersoft.fppractice.lists
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
-class SampleTests extends AnyFunSuite with Matchers {
+class SampleSpec extends AnyFunSuite with Matchers {
   val list = "a" :: "b" :: "c" :: MyNil
 
   test("should generate correct sample") {

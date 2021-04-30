@@ -3,7 +3,7 @@ package pl.snipersoft.fppractice.lists
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
-class ToStringTests extends AnyFunSuite with Matchers {
+class ToStringSpec extends AnyFunSuite with Matchers {
   test("should generate correct toString for empty list") {
     MyNil.toString shouldBe "[]"
   }

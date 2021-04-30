@@ -7,7 +7,7 @@ import org.scalatest.prop.TableDrivenPropertyChecks._
 
 import StringUtils._
 
-class IsAnagramTests extends AnyFunSuite with Matchers {
+class IsAnagramSpec extends AnyFunSuite with Matchers {
   val anagrams = Table(("s1", "s2"), ("Abcd", "dcbA"), ("MyBooK", "KooByM"), ("a", "a"))
   val noAnagrams = Table(("s1", "s2"), ("AbcD", "dcbA"), ("Scala", "Java"), ("a", "A"), ("Abcde", "edCbA"))
 
