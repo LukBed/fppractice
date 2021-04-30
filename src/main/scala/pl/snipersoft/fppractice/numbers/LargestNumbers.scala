@@ -13,13 +13,13 @@ object LargestNumbers {
   def isAStronger(a: Int, b: Int): Boolean = {
 
     @tailrec
-    def tailRec(as: List[Int], bs: List[Int]): Boolean = {
-      if (as.isEmpty && bs.isEmpty) false
-      else if (as.isEmpty) bs.head == 0
-      else if (bs.isEmpty) as.head != 0
-      else if (as.head == bs.head) tailRec(as.tail, bs.tail)
-      else as.head>bs.head
-    }
+    def tailRec(as: List[Int], bs: List[Int]): Boolean = (as, bs) match {
+        case (Nil, Nil) => false
+        case (Nil, bh :: _) => bh == 0
+        case (ah :: _, Nil) => ah != 0
+        case (ah :: at, bh :: bt) if ah == bh => tailRec(at, bt)
+        case _ => as.head>bs.head
+      }
 
     if (a == 0) true
     else if (b == 0) false
