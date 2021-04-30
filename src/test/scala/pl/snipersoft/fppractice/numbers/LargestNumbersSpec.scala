@@ -9,6 +9,9 @@ class LargestNumbersSpec extends AnyFunSuite with Matchers {
     ("input", "output"),
     (List(10, 2), "210"),
     (List(2, 10), "210"),
+    (List(2), "2"),
+    (List(0), "0"),
+    (List(0, 0, 0), "0"),
     (List(3, 30, 5, 9, 34), "9534330"),
     (List(), "0"))
 
@@ -20,25 +23,5 @@ class LargestNumbersSpec extends AnyFunSuite with Matchers {
 
   test("should throw if list contains negative number") {
     LargestNumbers.prepare(List(2, -4)) shouldBe None
-  }
-}
-
-class HelperSortingSpec extends AnyFunSuite with Matchers {
-  val data = Table(
-    ("weaker", "stronger"),
-    (3, 4),
-    (30, 4),
-    (300, 4),
-    (300, 3),
-    (300, 30),
-    (30, 310),
-    (300, 31),
-    (300, 0),
-    (246, 32),
-    (246, 310))
-
-  forAll(data) { (weaker: Int, stronger: Int) =>
-    LargestNumbers.isAStronger(weaker, stronger) shouldBe false
-    LargestNumbers.isAStronger(stronger, weaker) shouldBe true
   }
 }
