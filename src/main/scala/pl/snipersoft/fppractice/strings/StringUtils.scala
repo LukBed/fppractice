@@ -44,6 +44,8 @@ object StringUtils {
     }
 
     def justify(width: Int): String = Justifier(s, width)
+
+    def reverseWords: String = s.split(' ').filter(_.nonEmpty).reverse.mkString(" ")
   }
 
   def generateAllValidParentheses(n: Int): Set[String] = {
