@@ -22,13 +22,13 @@ class ReverseIntSpec extends AnyFunSuite with Matchers {
 
   forAll(validData) { (input: Int, expected: Int) =>
     test(s"should reverse $input") {
-      input.reverseInt shouldBe Some(expected)
+      input.reverse shouldBe Some(expected)
     }
   }
 
   invalidData.foreach { (input: Int) =>
     test(s"should not reverse $input") {
-      input.reverseInt shouldBe None
+      input.reverse shouldBe None
     }
   }
 }
