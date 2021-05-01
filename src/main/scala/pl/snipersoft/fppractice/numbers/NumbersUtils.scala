@@ -33,6 +33,11 @@ object NumbersUtils {
         case _ => helper(1, Nil)
       }
     }
+
+    def reverseInt: Option[Int] =
+      if (n == Int.MinValue) None
+      else if (n >= 0) n.toString.reverse.toIntOption
+      else (-n).reverseInt.map(-_)
   }
 
 }
