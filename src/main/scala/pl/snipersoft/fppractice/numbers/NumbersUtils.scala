@@ -38,6 +38,31 @@ object NumbersUtils {
       if (n == Int.MinValue) None
       else if (n >= 0) n.toString.reverse.toIntOption
       else (-n).reverse.map(-_)
+
+    /**
+     * Ugly numbers are numbers whose only prime factors are 2, 3 or 5.
+     */
+    def isUgly : Boolean = {
+      val PRIME_FACTORS = LazyList.from(List(2,3,5))
+      val max = (n/2) + (n%2)
+
+      @tailrec
+      def tailRec(i: Int, maybeUgly: Boolean): Boolean = {
+        val isFactor = n%i == 0
+        val isFactorOfPrimeFactor = PRIME_FACTORS.exists(a => i % a == 0)
+
+        if (i>max) maybeUgly
+        else if (isFactor && !isFactorOfPrimeFactor) false
+        else {
+          val maybeUglyInThisIteration = isFactor && isFactorOfPrimeFactor
+          tailRec(i+1, maybeUgly || maybeUglyInThisIteration)
+        }
+      }
+
+      if (n<=0) false
+      else if (n == 1 || PRIME_FACTORS.contains(n)) true
+      else tailRec(2, maybeUgly = false)
+    }
   }
 
   /**
