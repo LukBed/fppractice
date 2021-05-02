@@ -82,7 +82,7 @@ object NumbersUtils {
       @tailrec
       def tailRec(todoCheck: List[Int], todoInt: List[Int], acc: Int, noneIfNextIsGreater: Boolean): Option[Int] = {
         if (todoCheck.isEmpty) Some(acc)
-        else if (todoCheck.size<todoInt.size) tailRec(todoCheck, todoInt.tail, acc, false)
+        else if (todoCheck.size<todoInt.size) tailRec(todoCheck, todoInt.tail, acc, noneIfNextIsGreater = false)
         else if (todoCheck.head>todoInt.head && noneIfNextIsGreater) None
         else tailRec(todoCheck.tail, todoInt.tail,
           acc + todoCheck.head*Math.pow(10, todoCheck.tail.size).toInt,
@@ -90,7 +90,7 @@ object NumbersUtils {
       }
 
       if (digits.size>maxDigits.size) None
-      else tailRec(digits, maxDigits, 0, true)
+      else tailRec(digits, maxDigits, 0, noneIfNextIsGreater = true)
     }
 
     val minIntAbsoluteString = (-Int.MinValue.toLong).toString
@@ -101,5 +101,19 @@ object NumbersUtils {
       case Prepared(n, false) => executeParsing(n)
       case _ => None
     }
+  }
+
+  def nthUglyNumber(n: Int): Option[Int] = {
+
+    @tailrec
+    def tailRec(i: Int, indexOfNext: Int): Int = {
+      val isUgly = i.isUgly
+      if (isUgly && indexOfNext == n) i
+      else if (isUgly) tailRec(i+1, indexOfNext+1)
+      else tailRec(i+1, indexOfNext)
+    }
+
+    if (n<=0) None
+    else Some(tailRec(1, 1))
   }
 }
