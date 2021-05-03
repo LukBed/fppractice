@@ -119,10 +119,11 @@ object FuturesAndPromises extends App {
 
   }
 
+  //promise - "controller" over future
+  //writable-once container over future
   def promises(): Unit = {
     import scala.concurrent.ExecutionContext.Implicits.global
 
-    //promise - "controller" over future
     val promise = Promise[Int]()
     val future = promise.future
 
