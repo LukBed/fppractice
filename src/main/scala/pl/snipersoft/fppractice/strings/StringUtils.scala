@@ -62,4 +62,23 @@ object StringUtils {
       case _ => helper(1, Set("()"))
     }
   }
+
+  /**
+   * Can we build ransom note from letters from magazine
+   */
+  def canBuildRansomNote(note: String, magazine: String): Boolean = {
+    @tailrec
+    def tailRec(noteTodo: String, magazineTodo: String): Boolean = {
+      if (noteTodo.isEmpty) true
+      else if (!magazineTodo.contains(noteTodo.head)) false
+      else {
+        val newMagazineParts = magazineTodo.splitAt(magazineTodo.indexOf(noteTodo.head))
+        val start = newMagazineParts._1
+        val end = if (newMagazineParts._2.isEmpty) "" else newMagazineParts._2.substring(1)
+        tailRec(noteTodo.tail, start + end)
+      }
+    }
+
+  tailRec(note.split(' ').mkString(""), magazine)
+  }
 }
