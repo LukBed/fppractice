@@ -1,23 +1,27 @@
 package pl.snipersoft.fppractice.strings
 
 import scala.annotation.tailrec
+import scala.collection.immutable.SortedMap
 
 object ReorganizeString extends App {
 
   assert(reorganize("aaa").isEmpty)
   println(reorganize("aaabc"))
+  println(reorganize("aaabbcdef"))
 
   /**
    * In output each two adjacent characters must be different.
    * If it's not possible returning None.
    */
   def reorganize(s: String): Option[String] = {
+    implicit val tupleOrdering: Ordering[(Char, Int)] = Ordering.by[(Char, Int), Int](_._2)
 
     @tailrec
-    def tailRec(todo: Map[Char, Int], acc: String): Option[String] = {
+    def tailRec(todo: SortedMap[Char, Int], acc: String): Option[String] = {
+
       def readTheOftenestCharacter: Option[(Char, Int)] =
         if (acc.isEmpty) Some(todo.maxBy(_._2))
-        else todo.toSeq.filter(_._1 != acc.head).sortWith((o1, o2) => o1._2 > o2._2).headOption
+        else todo.toSeq.find(_._1 != acc.head)
 
 
       if (todo.isEmpty) Some(acc)
@@ -33,7 +37,8 @@ object ReorganizeString extends App {
       }
     }
 
-    val counts: Map[Char, Int] = s.groupBy(char => char).view.mapValues(_.length).toMap
-    tailRec(counts, "")
+    val counts = s.groupBy(char => char).view.mapValues(_.length).toSeq
+    val sortedCounts: SortedMap[Char, Int] = SortedMap.from(counts)
+    tailRec(sortedCounts, "")
   }
 }
