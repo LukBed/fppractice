@@ -67,18 +67,9 @@ object StringUtils {
    * Can we build ransom note from letters from magazine
    */
   def canBuildRansomNote(note: String, magazine: String): Boolean = {
-    @tailrec
-    def tailRec(noteTodo: String, magazineTodo: String): Boolean = {
-      if (noteTodo.isEmpty) true
-      else if (!magazineTodo.contains(noteTodo.head)) false
-      else {
-        val newMagazineParts = magazineTodo.splitAt(magazineTodo.indexOf(noteTodo.head))
-        val start = newMagazineParts._1
-        val end = if (newMagazineParts._2.isEmpty) "" else newMagazineParts._2.substring(1)
-        tailRec(noteTodo.tail, start + end)
-      }
-    }
-
-  tailRec(note.split(' ').mkString(""), magazine)
+    def countChars(s: String): Map[Char, Int] = s.groupBy(char => char).view.mapValues(_.length).toMap.removed(' ')
+    val noteChars = countChars(note)
+    val magazineChars = countChars(magazine)
+    noteChars.keySet.forall(char => noteChars.getOrElse(char, 0) <= magazineChars.getOrElse(char, 0))
   }
 }
