@@ -1,8 +1,9 @@
 package pl.snipersoft.fppractice.graphs
 
-import pl.snipersoft.fppractice.graphs.Graphs.Graph
+object TownJudge {
 
-object TownJudge extends App {
+  type Trust = (Int, Int)
+
   /*
    * There is a town with n people (1 to n).
    * Trust is the list a, b when a trust b.
@@ -11,14 +12,23 @@ object TownJudge extends App {
    * Everybody else trust the judge.
    * There is exactly one person who might be the judge.
    */
-  def findJudge(n: Int, trust: List[(Int, Int)]): Option[Int] = {
-    def trustedBy(i: Int): Set[Int] = trust.filter(pair => pair._1 == i && pair._2 != i).map(_._2).toSet
+  def findJudge(n: Int, trust: List[Trust]): Option[Int] = {
 
-    val graph: Graph[Int] = Range(1, n+1).map(i => i -> trustedBy(i)).toMap
+    val outDegrees: Map[Int, Int] = trust.foldLeft(Map[Int, Int]())((map, pair) => {
+      val trusting = pair._1
+      val newTrusted: Int = map.getOrElse(trusting, 0)+1
+      map + (trusting -> newTrusted)
+    })
 
-    def isDistrustful(maybeJudge: Int): Boolean = Graphs.outDegree(graph, maybeJudge) == 0
-    def isTrustedByEveryoneElse(maybeJudge: Int): Boolean = Graphs.inDegree(graph, maybeJudge) == n-1
+    val inDegrees: Map[Int, Int] = trust.foldLeft(Map[Int, Int]())((map, pair) => {
+      val trusted = pair._2
+      val newTrusting: Int = map.getOrElse(trusted, 0)+1
+      map + (trusted -> newTrusting)
+    })
 
-    graph.keys.find(maybeJudge => isDistrustful(maybeJudge) && isTrustedByEveryoneElse(maybeJudge))
+    def isDistrustful(maybeJudge: Int): Boolean = outDegrees.getOrElse(maybeJudge, 0) == 0
+    def isTrustedByEveryoneElse(maybeJudge: Int): Boolean = inDegrees.get(maybeJudge).contains(n - 1)
+
+    Range(1, n+1).find(maybeJudge => isDistrustful(maybeJudge) && isTrustedByEveryoneElse(maybeJudge))
   }
 }
