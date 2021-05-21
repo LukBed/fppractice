@@ -1,42 +1,11 @@
 package pl.snipersoft.advanced.implicits
 
-object ImplicitsApp extends App {
+object ImplicitParameters extends App {
 
-  implicitClass()
-  implicitMethod()
   implicitParameters()
   exerciseOrdering()
   organizing()
   exercisePurchases()
-
-  def implicitClass(): Unit = {
-    val pair = "Tiger" -> 88
-
-    implicit class RichString(s: String) {
-      def twice: String = s + s
-    }
-
-    println("abc".twice)
-  }
-
-  def implicitMethod(): Unit = {
-    case class Person(name: String) {
-      def greet = s"Hi, my name is $name"
-    }
-
-    implicit def personFromString(s: String): Person = Person(s)
-
-    val p: Person = "Kurt"
-    println("Janek".greet)
-
-    //if it's more than one possible solution, code will not compile!
-    /*
-    class A {
-      def greet: Int = 2
-    }
-    implicit def aFromString(s: String): A = new A
-    */
-  }
 
   def implicitParameters(): Unit = {
     def increment(n: Int)(implicit amount: Int): Int = n + amount
