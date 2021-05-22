@@ -44,4 +44,5 @@ object EqualityPlayground extends App {
   println(janek !== janek2)
 
   println(janek.===(janek2)(FullUserEqualizer))
+
 }

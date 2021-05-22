@@ -45,4 +45,18 @@ object TypeClasses extends App {
   -choose implementation
   -super expresive
    */
+
+
+  //context bounds
+  def htmlBoilerplate[T](value: T)(implicit serializer: HTMLSerializer[T]): String =
+    s"<html><body>${value.toHTML(serializer)}</body></html>"
+
+  //if we need below serializer instances we can use implicitly method
+  def htmlSugar[T : HTMLSerializer](value: T): String =
+    s"<html><body>${value.toHTML}</body></html>"
+
+  val standardSerializer = implicitly[HTMLSerializer[User]]
+
+  //out implementation
+  def myImplicitly[T](implicit v: T): T = v
 }
