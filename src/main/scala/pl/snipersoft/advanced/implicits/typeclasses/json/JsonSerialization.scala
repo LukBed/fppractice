@@ -30,28 +30,23 @@ object JsonSerialization {
     override def toJson(v: Date): String = "\"" + dateFormat.format(v) + "\""
   }
 
+  implicit object MapJsonSerializer extends JsonSerializer[Map[String, String]] {
+    override def toJson(v: Map[String, String]): String =
+      "{" + v.toSeq.map(p => "\"" + p._1 + "\": " + p._2).mkString(",\n") + "}"
+  }
+
   implicit object UserJsonSerializer extends JsonSerializer[User] {
     override def toJson(v: User): String =
-      s"""{
-         | "name": ${v.name.toJson},
-         | "age": ${v.age.toJson},
-         | "email": ${v.email}
-         |}""".stripMargin
+      Map("name" -> v.name.toJson, "age" -> v.age.toJson, "email" -> v.email.toJson).toJson
   }
 
   implicit object PostJsonSerializer extends JsonSerializer[Post] {
     override def toJson(v: Post): String =
-      s"""{
-         | "content": ${v.content.toJson},
-         | "createdAt": ${v.createdAt.toJson}
-         |}""".stripMargin
+      Map("content" -> v.content.toJson, "createdAt" -> v.createdAt.toJson).toJson
   }
 
   implicit object FeedJsonSerializer extends JsonSerializer[Feed] {
     override def toJson(v: Feed): String =
-      s"""{
-         | "user": ${v.user.toJson},
-         | "posts": ${v.posts.toJson}
-         |}""".stripMargin
+      Map("user" -> v.user.toJson, "posts" -> v.posts.toJson).toJson
   }
 }
