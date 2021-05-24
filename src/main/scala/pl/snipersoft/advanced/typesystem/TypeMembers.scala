@@ -60,10 +60,10 @@ object TypeMembers extends App {
 //    }
 
     //code below should compile
-    class IntList(h: Int, t: IntList) extends MyList with ApplicableToNumbers {
-      override type A = Int
-      override def head: Int = h
-      override def tail: MyList = t
-    }
+//    class IntList(h: Int, t: IntList) extends MyList with ApplicableToNumbers {
+//      override type A = Int
+//      override def head: Int = h
+//      override def tail: MyList = t
+//    }
   }
 }
