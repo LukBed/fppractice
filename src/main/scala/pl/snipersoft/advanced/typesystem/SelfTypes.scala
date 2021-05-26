@@ -62,7 +62,7 @@ object SelfTypes extends App {
     trait DependentComponent { self: Component =>
     }
 
-    trait Application { self: DependentComponent => } {}
+    trait Application { self: DependentComponent => }
 
     //server side rendering
 
