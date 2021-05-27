@@ -7,6 +7,7 @@ scalaVersion := "2.13.4"
 val scalaTestVersion = "3.2.3"
 
 libraryDependencies ++= Seq(
+  "org.scala-lang" % "scala-reflect" % scalaVersion.value,
   "org.scalatest" %% "scalatest" % scalaTestVersion % Test,
   "org.scalatest" %% "scalatest-funsuite" % scalaTestVersion % Test
 )
