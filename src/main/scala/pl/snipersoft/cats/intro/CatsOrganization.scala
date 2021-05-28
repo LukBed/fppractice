@@ -1,7 +1,8 @@
-package pl.snipersoft.cats
+package pl.snipersoft.cats.intro
 
 object CatsOrganization extends App {
-  import cats.Eq //import type class
+
+  import cats.Eq
   import cats.instances.int._ //import TC instances fot the types you need
 
   //TC API
@@ -10,12 +11,14 @@ object CatsOrganization extends App {
   //println(intEquality.eqv(1, "a")) //not compile
 
   //extension methods
+
   import cats.syntax.eq._
+
   2 eqv 3
   2 neqv 3
   2 === 3
   2 =!= 3
-//  2 === "s" //not compile
+  //  2 === "s" //not compile
 
   //extending the TC operations to composite types ex. lists
   //import cats.instances.list._ //we bring Eq[List[Int]] in scope - for previous versions of Cats (probably)
@@ -23,6 +26,7 @@ object CatsOrganization extends App {
 
   //create a TC instance for a custom type
   case class ToyCar(model: String, price: Double)
+
   implicit val toyCarEq: Eq[ToyCar] = Eq.instance(_.price == _.price)
   println(ToyCar("Car 1", 25) === ToyCar("Car 2", 25))
 

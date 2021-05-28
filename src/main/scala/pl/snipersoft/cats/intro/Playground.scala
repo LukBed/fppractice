@@ -1,4 +1,4 @@
-package pl.snipersoft.cats
+package pl.snipersoft.cats.intro
 
 import cats.Eval
 
@@ -13,6 +13,7 @@ object Playground extends App {
   trait SequentialChecker[T[_]] {
     def isSequential: Boolean
   }
+
   val listChecker = new SequentialChecker[List] {
     override def isSequential: Boolean = true
   }

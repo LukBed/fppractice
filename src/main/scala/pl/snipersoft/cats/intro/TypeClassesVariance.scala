@@ -1,7 +1,7 @@
-package pl.snipersoft.cats
+package pl.snipersoft.cats.intro
 
 object TypeClassesVariance extends App {
-  import cats.Eq
+
   import cats.instances.int._
   import cats.instances.option._
   import cats.syntax.eq._
@@ -27,6 +27,7 @@ object TypeClassesVariance extends App {
     implicit object AnimalSoundMaker extends SoundMaker[Animal]
     implicit object OptionSoundMaker extends SoundMaker[Option[Int]]
     def makeSound[T](implicit soundMaker: SoundMaker[T]): Unit = println("wow")
+
     makeSound[Animal]
     makeSound[Dog]
     makeSound[Some[Int]]
@@ -42,6 +43,7 @@ object TypeClassesVariance extends App {
       override def show: String = "Dogs everywhere"
     }
     def organizeShow[T](implicit event: AnimalShow[T]): Unit = println(event.show)
+
     organizeShow[Dog]
     //organizeShow[Animal] //not compile - two instances available!
 
