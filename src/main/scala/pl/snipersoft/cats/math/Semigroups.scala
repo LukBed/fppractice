@@ -27,6 +27,7 @@ object Semigroups extends App {
     println(reduce(numbers)) //55
     println(reduce(numberOptions)) //Some(55)
     println(reduce(secondNumberOptions)) //Some(55)
+//    println(reduce[Int](List())) //UnsupportedOperationException!
   }
 
   def customType(): Unit = {
