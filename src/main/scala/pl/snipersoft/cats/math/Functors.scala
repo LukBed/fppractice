@@ -18,7 +18,7 @@ object Functors extends App {
 
   def simplifiedDefinition() {
     trait MyFunctor[F[_]] {
-      def map[A, B](initialValue: F[A])(f: A => B): F[B]
+      def map[A, B](initialValue: F[A])(f: A => B): F[B] //like in Cats
     }
   }
 
