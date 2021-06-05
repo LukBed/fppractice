@@ -17,7 +17,8 @@ object DataValidation extends App {
     val ok: Validated[String, Int] = Validated.valid(42)
     val ok2: Validated[String, Int] = 42.valid
     val nok: Validated[String, Int] = Validated.invalid("NOK!")
-    val nok2: Validated[String, Int] = "NOK!".invalid    val test: Validated[String, Int] = Validated.cond(42>40, 42, "Nok!")
+    val nok2: Validated[String, Int] = "NOK!".invalid
+    val test: Validated[String, Int] = Validated.cond(42>40, 42, "Nok!")
   }
 
   def eitherValidation() {
