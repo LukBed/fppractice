@@ -5,7 +5,8 @@ import cats.Monoid
 //given Format[MyType], can we have also a Format[Option[MyType]]?
 object ContravariantFunctorsAndContramap extends App {
 
-  trait Format[T] { self => //contravariant type class (not connected with contravariant generics!)
+  //contravariant type class (not connected with contravariant generics!)
+  trait Format[T] { self => //alias to this
     def format(value: T): String
 
     def contramap[A](func: A => T): Format[A] = new Format[A] {
