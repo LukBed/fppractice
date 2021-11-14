@@ -9,6 +9,7 @@ val catsVersion = "2.6.1"
 
 libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-core" % catsVersion,
+  "org.typelevel" %% "cats-effect" % "3.2.9",
   "org.scala-lang" % "scala-reflect" % scalaVersion.value,
   "org.scalatest" %% "scalatest" % scalaTestVersion % Test,
   "org.scalatest" %% "scalatest-funsuite" % scalaTestVersion % Test
