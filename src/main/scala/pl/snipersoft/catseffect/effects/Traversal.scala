@@ -42,5 +42,5 @@ object TraversalExercises extends IOApp.Simple {
   }
 
 
-  override def run: IO[Unit] = IO(())
+  override def run: IO[Unit] = IO.unit
 }
