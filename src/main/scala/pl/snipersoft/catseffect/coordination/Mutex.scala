@@ -1,22 +1,46 @@
 package pl.snipersoft.catseffect.coordination
 
-import cats.effect.{IO, IOApp}
+import cats.effect.{Deferred, IO, IOApp}
 import pl.snipersoft.catseffect.utils.IoOps
 
+import scala.collection.immutable.Queue
 import scala.concurrent.duration.DurationInt
 import scala.util.Random
 
 //implement Mutex class and object
 abstract class Mutex {
   def acquire: IO[Unit]
+
   def release: IO[Unit]
 }
 
 object Mutex {
-  def create: IO[Mutex] = ???
+  type Signal = Deferred[IO, Unit]
+
+  case class State(locked: Boolean, waiting: Queue[Signal])
+
+  val unlocked: State = State(locked = false, Queue.empty)
+
+  def create: IO[Mutex] = IO.ref(unlocked).map { state =>
+    new Mutex {
+      override def acquire: IO[Unit] = IO.deferred[Unit].flatMap { signal =>
+        state.modify {
+          case State(false, _) => State(locked = true, Queue.empty) -> IO.unit
+          case State(true, queue) => State(locked = true, queue.enqueue(signal)) -> signal.get
+        }
+      }.flatten
+
+      override def release: IO[Unit] = state.modify {
+        case State(false, _) => unlocked -> IO.unit
+        case State(true, queue) if queue.isEmpty => unlocked -> IO.unit
+        case State(true, queue) => State(locked = true, queue.tail) -> queue.head.complete(()).void
+      }.flatten
+    }
+  }
 }
 
 object MutexApp extends IOApp.Simple {
+
   import cats.syntax.parallel._
 
   def criticalTask(): IO[Int] = IO.sleep(1.second) >> IO(Random.nextInt(100))
@@ -41,10 +65,10 @@ object MutexApp extends IOApp.Simple {
 
   def demoLockingTask(): IO[List[Int]] = for {
     mutex <- Mutex.create
-    results <-  (1 to 10).toList.parTraverse(createLockingTask(_, mutex))
+    results <- (1 to 10).toList.parTraverse(createLockingTask(_, mutex))
   } yield results
 
   override def run: IO[Unit] =
-//    demoNonLockingTask().debug.void
+  //    demoNonLockingTask().debug.void
     demoLockingTask().debug.void
 }
