@@ -2,7 +2,7 @@ package pl.snipersoft.catseffect.coordination
 
 import cats.effect.{IO, IOApp, Ref}
 import cats.implicits.catsSyntaxTuple2Parallel
-import pl.snipersoft.catseffect.utils.IoOps
+import pl.snipersoft.catseffect.utils.io.IoOps
 
 import scala.concurrent.duration.DurationInt
 

@@ -2,7 +2,7 @@ package pl.snipersoft.catseffect.coordination
 
 import cats.effect.std.CountDownLatch
 import cats.effect.{Deferred, IO, IOApp, Ref, Resource}
-import pl.snipersoft.catseffect.utils.{IoOps, ioSleepMaxSecond}
+import pl.snipersoft.catseffect.utils.io.{IoOps, ioSleepMaxSecond}
 
 import java.io.{File, FileWriter}
 import scala.concurrent.duration.DurationInt

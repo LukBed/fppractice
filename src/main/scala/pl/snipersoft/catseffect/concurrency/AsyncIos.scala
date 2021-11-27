@@ -1,12 +1,11 @@
 package pl.snipersoft.catseffect.concurrency
 
 import cats.effect.{IO, IOApp}
+import pl.snipersoft.catseffect.utils.io.IoOps
 
 import java.util.concurrent.{ExecutorService, Executors}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
-import pl.snipersoft.catseffect.utils.IoOps
-
 import scala.concurrent.duration.DurationInt
 
 /** IOs can be run asynchronously on fibers without having to manually manage the fiber lifecycle */

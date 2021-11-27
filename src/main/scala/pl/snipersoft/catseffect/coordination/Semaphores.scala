@@ -3,7 +3,7 @@ package pl.snipersoft.catseffect.coordination
 import cats.effect.std.Semaphore
 import cats.effect.{IO, IOApp}
 import pl.snipersoft.catseffect.coordination.Semaphores.doWorkWhileLoggedId
-import pl.snipersoft.catseffect.utils.IoOps
+import pl.snipersoft.catseffect.utils.io.IoOps
 
 import scala.concurrent.duration.DurationInt
 import scala.util.Random

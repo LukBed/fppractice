@@ -2,7 +2,7 @@ package pl.snipersoft.catseffect.effects
 
 import cats.Parallel
 import cats.effect.{IO, IOApp}
-import pl.snipersoft.catseffect.utils.IoOps
+import pl.snipersoft.catseffect.utils.io.IoOps
 
 object Parallelism extends IOApp.Simple {
 

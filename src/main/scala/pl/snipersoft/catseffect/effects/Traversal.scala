@@ -2,7 +2,7 @@ package pl.snipersoft.catseffect.effects
 
 import cats.Traverse
 import cats.effect.{IO, IOApp}
-import pl.snipersoft.catseffect.utils.IoOps
+import pl.snipersoft.catseffect.utils.io.IoOps
 
 object Traversal extends IOApp.Simple {
   def compute(s: String): IO[Int] = IO {

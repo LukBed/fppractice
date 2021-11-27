@@ -2,7 +2,7 @@ package pl.snipersoft.catseffect.concurrency
 
 import cats.effect.kernel.Outcome.Succeeded
 import cats.effect.{IO, IOApp, Resource}
-import pl.snipersoft.catseffect.utils.IoOps
+import pl.snipersoft.catseffect.utils.io.IoOps
 
 import java.io.{File, FileReader}
 import java.util.Scanner

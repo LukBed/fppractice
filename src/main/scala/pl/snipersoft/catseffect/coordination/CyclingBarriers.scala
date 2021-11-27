@@ -3,7 +3,7 @@ package pl.snipersoft.catseffect.coordination
 import cats.effect.kernel.Deferred
 import cats.effect.std.CyclicBarrier
 import cats.effect.{IO, IOApp}
-import pl.snipersoft.catseffect.utils.{IoOps, ioSleepMaxSecond}
+import pl.snipersoft.catseffect.utils.io.{IoOps, ioSleepMaxSecond}
 
 /**
  * For batching.

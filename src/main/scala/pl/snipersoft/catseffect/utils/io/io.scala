@@ -1,12 +1,12 @@
-package pl.snipersoft.catseffect
+package pl.snipersoft.catseffect.utils
 
 import cats.effect.IO
 
 import scala.concurrent.duration.DurationInt
 import scala.util.Random
 
-package object utils {
-  implicit class IoOps[T](val io: IO[T]) {
+package object io {
+  implicit class IoOps[T](val io: IO[T]) extends AnyVal {
     def debug: IO[T] = for {
       a <- io
       t = Thread.currentThread().getName

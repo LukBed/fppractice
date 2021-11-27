@@ -1,7 +1,7 @@
 package pl.snipersoft.catseffect.coordination
 
 import cats.effect.{Deferred, IO, IOApp}
-import pl.snipersoft.catseffect.utils.IoOps
+import pl.snipersoft.catseffect.utils.io.IoOps
 
 import scala.collection.immutable.Queue
 import scala.concurrent.duration.DurationInt

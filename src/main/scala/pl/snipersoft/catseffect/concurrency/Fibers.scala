@@ -3,7 +3,7 @@ package pl.snipersoft.catseffect.concurrency
 import cats.effect.kernel.Outcome
 import cats.effect.kernel.Outcome.{Canceled, Errored, Succeeded}
 import cats.effect.{Fiber, IO, IOApp}
-import pl.snipersoft.catseffect.utils.IoOps
+import pl.snipersoft.catseffect.utils.io.IoOps
 
 import scala.concurrent.duration.{DurationInt, FiniteDuration}
 
