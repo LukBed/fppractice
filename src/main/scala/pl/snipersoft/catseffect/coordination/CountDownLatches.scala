@@ -2,7 +2,7 @@ package pl.snipersoft.catseffect.coordination
 
 import cats.effect.std.CountDownLatch
 import cats.effect.{Deferred, IO, IOApp, Ref, Resource}
-import pl.snipersoft.catseffect.utils.IoOps
+import pl.snipersoft.catseffect.utils.{IoOps, ioSleepMaxSecond}
 
 import java.io.{File, FileWriter}
 import scala.concurrent.duration.DurationInt
@@ -85,7 +85,7 @@ object FileDownloaderExercise extends IOApp.Simple {
 
     def downloadTempFile(n: Int, latch: CountDownLatch[IO]): IO[Unit] = for {
       _ <- IO(s"Downloading chunk $n").debug
-      _ <- IO.sleep((Random.nextDouble() * 1000).toInt.millis)
+      _ <- ioSleepMaxSecond
       chunk <- FileServer.getFileChunk(n)
       - <- writeToFile(tempFileName(n), chunk)
       _ <- IO(s"Downloading chunk $n completed").debug
@@ -142,7 +142,7 @@ object MyCountDownLatch extends IOApp.Simple {
 
   override def run: IO[Unit] = for {
     myLatch <- MyCountDownLatch(5)
-    _ <- (1 to 5).toList.parTraverse(n => IO.sleep((Random.nextDouble() * 1000).toInt.millis) >> myLatch.release >> IO(s"Released $n").debug).start
+    _ <- (1 to 5).toList.parTraverse(n => ioSleepMaxSecond >> myLatch.release >> IO(s"Released $n").debug).start
     fib <- (myLatch.await >> IO("I'm ready!").debug).start
     _ <- fib.join
   } yield ()
