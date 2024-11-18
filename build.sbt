@@ -10,3 +10,5 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % scalaTestVersion % Test,
   "org.scalatest" %% "scalatest-funsuite" % scalaTestVersion % Test
 )
+
+test
